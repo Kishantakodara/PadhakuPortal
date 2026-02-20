@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-dom": "^19.2.0",
-    "react": "^19.2.0",
-    "lucide-react": "^0.554.0",
-    "react-router-dom": "^7.9.6",
     "@google/genai": "latest",
     "docx": "latest",
-    "file-saver": "latest"
+    "file-saver": "latest",
+    "lucide-react": "^0.554.0",
+    "openai": "^6.22.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
