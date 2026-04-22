@@ -1,10 +1,13 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Filter, Search, BookOpen, User, Eye, Clock, ChevronDown, SlidersHorizontal, FileText } from 'lucide-react';
-import { NOTES, DEPARTMENTS, SEMESTERS } from '../constants';
+import { Filter, Search, BookOpen, User, Eye, Clock, ChevronDown, SlidersHorizontal, FileText, Loader2 } from 'lucide-react';
+import { DEPARTMENTS, SEMESTERS } from '../constants';
 import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
+import { db } from '../utils/firebase';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { Note } from '../types';
 
 interface NoteFilterState {
   department: string | 'all';
@@ -13,6 +16,26 @@ interface NoteFilterState {
 }
 
 const NotesList: React.FC = () => {
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const q = query(collection(db, 'notes'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as any[];
+      setNotes(data);
+      setIsLoading(false);
+    }, (err) => {
+      console.error("Error fetching notes:", err);
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [filters, setFilters] = useState<NoteFilterState>({
     department: 'all',
     semester: 'all',
@@ -22,14 +45,14 @@ const NotesList: React.FC = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const filteredNotes = useMemo(() => {
-    return NOTES.filter((note) => {
-      const isPublished = note.status === 'published';
+    return notes.filter((note) => {
+      const isPublished = (note as any).status !== 'pending';
       const matchDept = filters.department === 'all' || note.departmentId === filters.department;
       const matchSem = filters.semester === 'all' || note.semester === filters.semester;
       const matchSearch = note.title.toLowerCase().includes(filters.search.toLowerCase());
       return isPublished && matchDept && matchSem && matchSearch;
     });
-  }, [filters]);
+  }, [filters, notes]);
 
   const handleFilterChange = (key: keyof NoteFilterState, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -144,7 +167,12 @@ const NotesList: React.FC = () => {
             </div>
 
             {/* Results Grid */}
-            {filteredNotes.length === 0 ? (
+            {isLoading ? (
+               <div className="bg-white dark:bg-navy-900 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 p-20 text-center">
+                  <Loader2 className="h-10 w-10 text-brand-orange animate-spin mx-auto mb-4" />
+                  <p className="text-gray-500 font-medium tracking-tight">Syncing note repository...</p>
+               </div>
+            ) : filteredNotes.length === 0 ? (
               <div className="bg-white dark:bg-navy-900 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 p-12 text-center transition-colors">
                 <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">No notes found</h3>

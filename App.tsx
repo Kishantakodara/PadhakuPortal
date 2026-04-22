@@ -6,28 +6,41 @@ import Home from './pages/Home';
 import PYQList from './pages/PYQList';
 import NoteView from './pages/NoteView';
 import NotesList from './pages/NotesList';
-import AdminUpload from './pages/AdminUpload';
+import AdminDashboard from './pages/AdminDashboard'; // Replacing AdminUpload
+import AdminLogin from './pages/AdminLogin';
 import Contribute from './pages/Contribute';
 import AIChat from './pages/AIChat';
 import AssignmentSolver from './pages/AssignmentSolver';
+import { AuthProvider } from './context/AuthContext';
+import AdminRoute from './components/AdminRoute';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/pyqs" element={<PYQList />} />
-          <Route path="/notes" element={<NotesList />} />
-          <Route path="/notes/:id" element={<NoteView />} />
-          <Route path="/ai-tutor" element={<AIChat />} />
-          <Route path="/assignment-solver" element={<AssignmentSolver />} />
-          <Route path="/contribute" element={<Contribute />} />
-          <Route path="/admin" element={<AdminUpload />} />
-          {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Layout>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/pyqs" element={<PYQList />} />
+            <Route path="/notes" element={<NotesList />} />
+            <Route path="/notes/:id" element={<NoteView />} />
+            <Route path="/ai-tutor" element={<AIChat />} />
+            <Route path="/assignment-solver" element={<AssignmentSolver />} />
+            <Route path="/contribute" element={<Contribute />} />
+            
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } />
+            <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+            
+            {/* Fallback route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
     </Router>
   );
 };

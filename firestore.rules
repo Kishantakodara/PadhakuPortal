@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helper Primitives ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email == 'kishantakodara4@gmail.com';
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // --- Entity Validation Blueprints ---
+
+    function isValidPyq(data) {
+      // Required fields check
+      return data.title is string && data.title.size() <= 200
+        && data.departmentId is string 
+        && data.semester is number
+        && data.pdfUrl is string
+        && (data.get('storagePath', '') is string)
+        && (data.get('createdAt', request.time) != null);
+    }
+
+    function isValidNote(data) {
+      return data.title is string && data.title.size() <= 200
+        && data.departmentId is string 
+        && data.semester is number
+        && data.author is string
+        && data.pdfUrl is string
+        && (data.get('storagePath', '') is string)
+        && (data.get('createdAt', request.time) != null);
+    }
+
+    function isValidAnnouncement(data) {
+      return data.text is string && data.text.size() <= 2000
+        && (data.get('createdAt', request.time) != null);
+    }
+
+    // --- Collection Rules ---
+
+    match /pyqs/{pyqId} {
+      allow read: if true; 
+      allow create: if isAdmin() && isValidPyq(incoming());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /notes/{noteId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidNote(incoming());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidAnnouncement(incoming());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

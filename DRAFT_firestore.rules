@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helper Primitives ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isEmailVerified() && request.auth.token.email == 'kishantakodara4@gmail.com';
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Entity Validation Blueprints ---
+
+    function isValidPyq(data) {
+      return data.keys().hasAll(['title', 'departmentId', 'semester', 'pdfUrl', 'createdAt'])
+        && data.title is string && data.title.size() <= 200
+        && data.departmentId is string && data.departmentId.size() <= 50
+        && data.semester is number && data.semester >= 1 && data.semester <= 10
+        && data.pdfUrl is string && data.pdfUrl.size() <= 500
+        && data.createdAt == request.time
+        && (data.get('year', 2024) is number)
+        && (data.get('type', '') is string)
+        && (data.get('views', 0) is number)
+        && (data.get('likes', 0) is number);
+    }
+
+    function isValidNote(data) {
+      return data.keys().hasAll(['title', 'departmentId', 'semester', 'pdfUrl', 'author', 'createdAt'])
+        && data.title is string && data.title.size() <= 200
+        && data.departmentId is string && data.departmentId.size() <= 50
+        && data.semester is number && data.semester >= 1 && data.semester <= 10
+        && data.pdfUrl is string && data.pdfUrl.size() <= 500
+        && data.author is string && data.author.size() <= 100
+        && data.createdAt == request.time
+        && (data.get('topics', []) is list)
+        && (data.get('views', 0) is number)
+        && (data.get('likes', 0) is number);
+    }
+
+    function isValidAnnouncement(data) {
+      return data.keys().hasAll(['text', 'createdAt'])
+        && data.text is string && data.text.size() <= 2000
+        && data.createdAt == request.time;
+    }
+
+    // --- Collection Rules ---
+
+    match /pyqs/{pyqId} {
+      allow read: if true; // Public read
+      allow create: if isAdmin() && isValidId(pyqId) && isValidPyq(incoming());
+      allow update: if isAdmin() && isValidId(pyqId) && isValidPyq(incoming())
+        && incoming().createdAt == existing().createdAt; // Immutable creation time
+      allow delete: if isAdmin() && isValidId(pyqId);
+    }
+
+    match /notes/{noteId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(noteId) && isValidNote(incoming());
+      allow update: if isAdmin() && isValidId(noteId) && isValidNote(incoming())
+        && incoming().createdAt == existing().createdAt;
+      allow delete: if isAdmin() && isValidId(noteId);
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidId(announcementId) && isValidAnnouncement(incoming());
+      allow update: if isAdmin() && isValidId(announcementId) && isValidAnnouncement(incoming())
+        && incoming().createdAt == existing().createdAt;
+      allow delete: if isAdmin() && isValidId(announcementId);
+    }
+  }
+}

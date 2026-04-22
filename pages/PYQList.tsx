@@ -1,16 +1,37 @@
 
-import React, { useState, useMemo } from 'react';
-import { Filter, FileText, ChevronDown, Search, SlidersHorizontal, X, ChevronRight, Eye } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Filter, FileText, ChevronDown, Search, SlidersHorizontal, X, ChevronRight, Eye, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
-import { PYQS, DEPARTMENTS, YEARS, SEMESTERS } from '../constants';
+import { DEPARTMENTS, YEARS, SEMESTERS } from '../constants';
 import { PaperType, FilterState, PYQ } from '../types';
 import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import PYQModal from '../components/PYQModal';
+import { db } from '../utils/firebase';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 
 const PYQList: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const [pyqs, setPyqs] = useState<PYQ[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const q = query(collection(db, 'pyqs'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as any[];
+      setPyqs(data);
+      setIsLoading(false);
+    }, (err) => {
+      console.error("Error fetching pyqs:", err);
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const [filters, setFilters] = useState<FilterState>({
     department: searchParams.get('department') || 'all',
@@ -25,9 +46,10 @@ const PYQList: React.FC = () => {
   const [selectedPYQ, setSelectedPYQ] = useState<PYQ | null>(null);
 
   const filteredPYQs = useMemo(() => {
-    return PYQS.filter((pyq) => {
-      const isPublished = pyq.status === 'published';
+    return pyqs.filter((pyq) => {
+      const isPublished = (pyq as any).status !== 'pending';
       const matchDept = filters.department === 'all' || pyq.departmentId === filters.department;
+      // ...
       const matchSem = filters.semester === 'all' || pyq.semester === filters.semester;
       const matchYear = filters.year === 'all' || pyq.year === filters.year;
       const matchType = filters.type === 'all' || pyq.type === filters.type;
@@ -182,7 +204,12 @@ const PYQList: React.FC = () => {
             
             {/* Results List (Card Style Rows) */}
             <div className="space-y-3">
-              {filteredPYQs.length === 0 ? (
+              {isLoading ? (
+                <div className="bg-white dark:bg-navy-900 rounded-2xl border border-gray-100 dark:border-navy-800 p-20 text-center">
+                    <Loader2 className="h-10 w-10 text-brand-orange animate-spin mx-auto mb-4" />
+                    <p className="text-gray-500 font-medium tracking-tight">Accessing digital library...</p>
+                </div>
+              ) : filteredPYQs.length === 0 ? (
                 <div className="bg-white dark:bg-navy-900 rounded-2xl border border-gray-100 dark:border-navy-800 p-16 text-center">
                   <div className="bg-gray-50 dark:bg-navy-800 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                      <FileText className="h-10 w-10 text-gray-300" />

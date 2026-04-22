@@ -14,7 +14,7 @@ import {
   Plus,
   AlertCircle
 } from 'lucide-react';
-import OpenAI from 'openai';
+import { GoogleGenAI, Type } from "@google/genai";
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
 import saveAs from 'file-saver';
 import { retryWithBackoff } from '../utils/api';
@@ -100,7 +100,7 @@ const AssignmentSolver: React.FC = () => {
     setProcessingStatus('Parsing assignment and syllabus...');
 
     try {
-      const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '', dangerouslyAllowBrowser: true });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const assignmentBase64 = await fileToBase64(assignmentFile);
       const syllabusBase64 = syllabusFile ? await fileToBase64(syllabusFile) : null;
       const referenceBase64 = referenceFile ? await fileToBase64(referenceFile) : null;
@@ -113,38 +113,31 @@ const AssignmentSolver: React.FC = () => {
           Only include the question text.
         `;
 
-        return await client.responses.create({
-          model: 'gpt-4o',
-          input: [{
-            role: 'user',
-            content: [
-              {
-                type: 'input_file',
-                filename: assignmentFile.name,
-                file_data: `data:${assignmentFile.type};base64,${assignmentBase64}`,
+        const parts: any[] = [
+          { text: extractPrompt },
+          { inlineData: { mimeType: assignmentFile.type, data: assignmentBase64 } }
+        ];
+
+        return await ai.models.generateContent({
+          model: 'gemini-3-flash-preview',
+          contents: { parts },
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                questions: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING }
+                }
               },
-              { type: 'input_text', text: extractPrompt },
-            ],
-          }],
-          text: {
-            format: {
-              type: 'json_schema',
-              name: 'questions_extraction',
-              schema: {
-                type: 'object',
-                properties: {
-                  questions: { type: 'array', items: { type: 'string' } },
-                },
-                required: ['questions'],
-                additionalProperties: false,
-              },
-              strict: true,
-            },
-          },
+              required: ["questions"]
+            }
+          }
         });
       });
 
-      const parsed = JSON.parse(extractionResponse.output_text || '{"questions": []}');
+      const parsed = JSON.parse(extractionResponse.text || '{"questions": []}');
       const extractedQuestions: ProcessedQuestion[] = parsed.questions.map((q: string, i: number) => ({
         id: i + 1,
         question: q,
@@ -179,31 +172,21 @@ const AssignmentSolver: React.FC = () => {
               - Avoid all conversational filler.
             `;
 
-            const solveParts: OpenAI.Responses.ResponseInputContent[] = [
-              { type: 'input_text', text: solvePrompt },
-            ];
+            const solveParts: any[] = [{ text: solvePrompt }];
             if (syllabusBase64) {
-              solveParts.push({
-                type: 'input_file',
-                filename: syllabusFile?.name || 'syllabus.pdf',
-                file_data: `data:${syllabusFile?.type || 'application/pdf'};base64,${syllabusBase64}`,
-              });
+              solveParts.push({ inlineData: { mimeType: syllabusFile?.type || 'application/pdf', data: syllabusBase64 } });
             }
             if (referenceBase64) {
-              solveParts.push({
-                type: 'input_file',
-                filename: referenceFile?.name || 'reference.pdf',
-                file_data: `data:${referenceFile?.type || 'application/pdf'};base64,${referenceBase64}`,
-              });
+              solveParts.push({ inlineData: { mimeType: referenceFile?.type || 'application/pdf', data: referenceBase64 } });
             }
 
-            return await client.responses.create({
-              model: 'gpt-4o',
-              input: [{ role: 'user', content: solveParts }],
+            return await ai.models.generateContent({
+              model: 'gemini-3-pro-preview',
+              contents: { parts: solveParts },
             });
           });
 
-          const answer = solveResponse.output_text;
+          const answer = solveResponse.text;
           setQuestions(prev => prev.map((q, idx) => idx === i ? { ...q, status: 'completed', answer } : q));
         } catch (err: any) {
           console.error(`Failed to solve question ${i + 1}:`, err);

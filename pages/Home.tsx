@@ -1,14 +1,35 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles } from 'lucide-react';
-import { DEPARTMENTS, ANNOUNCEMENTS } from '../constants';
+import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2 } from 'lucide-react';
+import { DEPARTMENTS } from '../constants';
 import * as Icons from 'lucide-react';
 import AdPlaceholder from '../components/AdPlaceholder';
+import { db } from '../utils/firebase';
+import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loadingAnnouncements, setLoadingAnnouncements] = useState(true);
+
+  useEffect(() => {
+    const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(5));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setAnnouncements(data);
+      setLoadingAnnouncements(false);
+    }, (error) => {
+      console.error("Error fetching announcements:", error);
+      setLoadingAnnouncements(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +51,7 @@ const Home: React.FC = () => {
        <div className="fixed inset-0 z-[-1] bg-grid-pattern dark:bg-grid-pattern-dark bg-grid opacity-[0.4] pointer-events-none" />
        
       {/* Hero Section - Mesh Gradient */}
-      <div className="relative pt-10 pb-20 lg:pt-16 lg:pb-24">
+      <div id="hero" className="relative pt-10 pb-20 lg:pt-16 lg:pb-24">
         {/* Soft gradient blobs */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl overflow-hidden z-[-1] opacity-60 dark:opacity-30 pointer-events-none">
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-200 dark:bg-blue-900 blur-[100px] animate-float" />
@@ -47,7 +68,11 @@ const Home: React.FC = () => {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight animate-slide-up">
-            The Smarter Way <br />
+            <Link to="/" className="group inline-flex flex-col items-center">
+              <span className="text-sm font-bold text-brand-orange mb-2 tracking-[0.3em] uppercase opacity-80 group-hover:opacity-100 transition-opacity">PadhakuPortal</span>
+              <span>The Smarter Way</span>
+            </Link>
+            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-500">to Study.</span>
           </h1>
           
@@ -125,15 +150,20 @@ const Home: React.FC = () => {
           </Link>
 
           {/* Featured Card - Adaptive Style (Light/Dark) */}
-          <div className="relative overflow-hidden bg-white dark:bg-navy-950 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 cursor-pointer">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-white/5 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 bg-yellow-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-yellow-600 dark:text-yellow-400 mb-6 group-hover:rotate-6 transition-transform">
+          <div 
+            id="featured-card-tips"
+            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 cursor-pointer"
+          >
+            <div 
+              className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-yellow-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" 
+            />
+            <div className="relative z-10 text-left">
+              <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/50 rounded-2xl flex items-center justify-center text-yellow-600 dark:text-yellow-400 mb-6 group-hover:rotate-6 transition-transform">
                 <Sparkles className="h-6 w-6" />
               </div>
               <h3 className="text-2xl font-bold text-navy-900 dark:text-white mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">Exam Tips</h3>
-              <p className="text-gray-500 dark:text-blue-100/70 mb-6 leading-relaxed">Strategies and shortcuts from toppers to maximize your score.</p>
-              <div className="flex items-center text-sm font-bold text-yellow-600 dark:text-white">
+              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Strategies and shortcuts from toppers to maximize your score.</p>
+              <div className="flex items-center text-sm font-bold text-yellow-600 dark:text-yellow-400">
                  Learn More <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
@@ -156,27 +186,37 @@ const Home: React.FC = () => {
                     <button className="text-sm text-gray-500 hover:text-navy-900 font-medium">View All</button>
                 </div>
                 <div className="space-y-3">
-                    {ANNOUNCEMENTS.map((item) => (
-                    <div key={item.id} className="group flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-navy-800/50 border border-transparent hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800 transition-all cursor-pointer">
-                        <div className="flex items-start gap-4">
-                            <div className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${
-                                item.category === 'Important' ? 'bg-red-500' : item.category === 'Exam' ? 'bg-purple-500' : 'bg-blue-500'
-                            }`} />
-                            <div>
-                                <h3 className="font-semibold text-navy-900 dark:text-gray-100 group-hover:text-brand-orange transition-colors text-sm md:text-base">{item.title}</h3>
-                                <div className="flex items-center gap-3 mt-1">
-                                    <span className="text-xs text-gray-400 flex items-center gap-1"><Calendar className="h-3 w-3" /> {item.date}</span>
-                                    <span className={`text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded ${
-                                        item.category === 'Important' ? 'bg-red-50 text-red-600' : 
-                                        item.category === 'Exam' ? 'bg-purple-50 text-purple-600' :
-                                        'bg-blue-50 text-blue-600'
-                                    }`}>{item.category}</span>
+                    {loadingAnnouncements ? (
+                      <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+                        <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                        <p className="text-sm">Loading announcements...</p>
+                      </div>
+                    ) : announcements.length > 0 ? (
+                      announcements.map((item) => (
+                        <div key={item.id} className="group flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-navy-800/50 border border-transparent hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800 transition-all cursor-pointer">
+                            <div className="flex items-start gap-4">
+                                <div className="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 bg-brand-orange" />
+                                <div>
+                                    <h3 className="font-semibold text-navy-900 dark:text-gray-100 group-hover:text-brand-orange transition-colors text-sm md:text-base">{item.text}</h3>
+                                    <div className="flex items-center gap-3 mt-1">
+                                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                                          <Calendar className="h-3 w-3" /> 
+                                          {item.createdAt?.seconds 
+                                            ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() 
+                                            : 'Just now'}
+                                        </span>
+                                        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-navy-700 dark:text-blue-400">New</span>
+                                    </div>
                                 </div>
                             </div>
+                            <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-brand-orange transition-colors hidden sm:block" />
                         </div>
-                        <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-brand-orange transition-colors hidden sm:block" />
-                    </div>
-                    ))}
+                      ))
+                    ) : (
+                      <div className="text-center py-10 text-gray-500 text-sm italic">
+                        No active announcements at the moment. Check back later!
+                      </div>
+                    )}
                 </div>
             </div>
 

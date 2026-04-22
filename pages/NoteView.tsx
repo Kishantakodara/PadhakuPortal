@@ -1,21 +1,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool } from 'lucide-react';
-import { NOTES, DEPARTMENTS } from '../constants';
+import { DEPARTMENTS } from '../constants';
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import FlashcardDeck from '../components/FlashcardDeck';
 import { GoogleGenAI, Type } from '@google/genai';
-import { Flashcard } from '../types';
+import { Flashcard, Note } from '../types';
+import { db } from '../utils/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 const NoteView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const note = NOTES.find(n => n.id === id);
-  const dept = note ? DEPARTMENTS.find(s => s.id === note.departmentId) : undefined;
+  const [note, setNote] = useState<Note | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('');
   
-  const [activeSection, setActiveSection] = useState(note?.sections[0]?.id || '');
+  useEffect(() => {
+    if (!id) return;
+    const unsubscribe = onSnapshot(doc(db, 'notes', id), (snapshot) => {
+        if (snapshot.exists()) {
+            const data = { id: snapshot.id, ...snapshot.data() } as Note;
+            setNote(data);
+            if (!activeSection && data.sections?.[0]) {
+                setActiveSection(data.sections[0].id);
+            }
+        }
+        setIsLoading(false);
+    }, (err) => {
+        console.error("Error loading note:", err);
+        setIsLoading(false);
+    });
+    return () => unsubscribe();
+  }, [id, activeSection]);
+
+  const dept = note ? DEPARTMENTS.find(s => s.id === note.departmentId) : undefined;
   const [isShareOpen, setIsShareOpen] = useState(false);
   
   // Flashcard State
@@ -102,6 +123,15 @@ const NoteView: React.FC = () => {
       setIsSuggesting(false);
       setSuggestion('');
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-navy-950 flex flex-col items-center justify-center p-4">
+        <Loader2 className="h-10 w-10 text-brand-orange animate-spin mb-4" />
+        <p className="text-gray-500 font-medium font-display uppercase tracking-widest text-xs">Opening Document...</p>
+      </div>
+    );
+  }
 
   if (!note) {
     return (
