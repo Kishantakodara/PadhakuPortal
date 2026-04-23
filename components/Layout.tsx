@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Menu, X, Bot, User, FileEdit } from 'lucide-react';
+import { GraduationCap, Menu, X, Bot, User } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 interface LayoutProps {
@@ -54,9 +54,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <div className="w-px h-6 bg-gray-200 dark:bg-navy-700 mx-2"></div>
 
-              <Link to="/assignment-solver" className={`${isActive('/assignment-solver')} transition-all px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5`}>
-                <FileEdit className="h-4 w-4" /> Solver
-              </Link>
               <Link to="/ai-tutor" className={`transition-all px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 ${
                 location.pathname === '/ai-tutor'
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20'
@@ -93,9 +90,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-navy-900 dark:text-white hover:bg-gray-50 dark:hover:bg-navy-800">Home</Link>
               <Link to="/pyqs" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">PYQs</Link>
               <Link to="/notes" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">Notes</Link>
-              <Link to="/assignment-solver" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800 flex items-center gap-2">
-                <FileEdit className="h-4 w-4" /> Solver
-              </Link>
               <Link to="/ai-tutor" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-brand-orange bg-orange-50 dark:bg-navy-800/50 flex items-center gap-2">
                 <Bot className="h-4 w-4" /> AI Tutor
               </Link>
@@ -137,7 +131,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <li><Link to="/pyqs" className="hover:text-brand-orange transition-colors">Previous Year Papers</Link></li>
                         <li><Link to="/notes" className="hover:text-brand-orange transition-colors">Lecture Notes</Link></li>
                         <li><Link to="/ai-tutor" className="hover:text-brand-orange transition-colors">AI Study Buddy</Link></li>
-                        <li><Link to="/assignment-solver" className="hover:text-brand-orange transition-colors">Assignment Solver</Link></li>
                     </ul>
                 </div>
 

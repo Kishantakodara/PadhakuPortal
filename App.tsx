@@ -10,7 +10,6 @@ import AdminDashboard from './pages/AdminDashboard'; // Replacing AdminUpload
 import AdminLogin from './pages/AdminLogin';
 import Contribute from './pages/Contribute';
 import AIChat from './pages/AIChat';
-import AssignmentSolver from './pages/AssignmentSolver';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 
@@ -25,7 +24,6 @@ const App: React.FC = () => {
             <Route path="/notes" element={<NotesList />} />
             <Route path="/notes/:id" element={<NoteView />} />
             <Route path="/ai-tutor" element={<AIChat />} />
-            <Route path="/assignment-solver" element={<AssignmentSolver />} />
             <Route path="/contribute" element={<Contribute />} />
             
             <Route path="/admin/login" element={<AdminLogin />} />

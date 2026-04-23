@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader2, Trash2, AlertTriangle, Paperclip, X, Image as ImageIcon, FileText, Plus } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader2, AlertTriangle, Paperclip, X, Image as ImageIcon, FileText, Plus } from 'lucide-react';
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 import { useSearchParams } from 'react-router-dom';
 import { NOTES, PYQS, DEPARTMENTS } from '../constants';
@@ -209,11 +209,6 @@ const AIChat: React.FC = () => {
     }
   };
 
-  const clearChat = () => {
-    setMessages([{ role: 'model', text: "Chat cleared! Ready for your next question." }]);
-    setAttachments([]);
-  };
-
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] bg-gray-50 dark:bg-navy-950 animate-fade-in-up">
       <div className="bg-white dark:bg-navy-900 border-b border-gray-200 dark:border-navy-800 px-6 py-4 flex justify-between items-center shadow-sm z-10">
@@ -224,7 +219,6 @@ const AIChat: React.FC = () => {
             <p className="text-xs text-gray-500 dark:text-gray-400">Powered by Gemini 3 Flash</p>
           </div>
         </div>
-        <button onClick={clearChat} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Clear Chat"><Trash2 className="h-5 w-5" /></button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth">
@@ -290,8 +284,26 @@ const AIChat: React.FC = () => {
               {attachments.length > 0 && <span className="absolute -top-1 -right-1 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm ring-2 ring-white dark:ring-navy-900 animate-bounce">{attachments.length}</span>}
             </button>
             <div className="relative flex-1">
-              <textarea ref={inputRef} value={input} onChange={(e) => { setInput(e.target.value); e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }} onKeyDown={handleKeyDown} placeholder="Ask a question or upload files..." className="w-full bg-gray-100 dark:bg-navy-950 text-navy-900 dark:text-white border-0 rounded-2xl pl-4 pr-14 py-3.5 focus:ring-2 focus:ring-brand-orange resize-none max-h-32 shadow-inner text-sm" rows={1} />
-              <button onClick={handleSend} disabled={(!input.trim() && attachments.length === 0) || isLoading} className="absolute right-2 bottom-2 bg-brand-orange text-white p-2 rounded-xl hover:bg-brand-hover transition-all disabled:opacity-50 shadow-sm"><Send className="h-5 w-5" /></button>
+              <textarea 
+                ref={inputRef} 
+                value={input} 
+                onChange={(e) => { 
+                  setInput(e.target.value); 
+                  e.target.style.height = 'auto'; 
+                  e.target.style.height = e.target.scrollHeight + 'px'; 
+                }} 
+                onKeyDown={handleKeyDown} 
+                placeholder="Ask a question or upload files..." 
+                className="w-full bg-gray-100 dark:bg-navy-950 text-navy-900 dark:text-white border-0 rounded-[1.5rem] pl-5 pr-16 py-5 focus:ring-2 focus:ring-brand-orange resize-none max-h-48 shadow-inner text-base md:text-lg transition-all" 
+                rows={1} 
+              />
+              <button 
+                onClick={handleSend} 
+                disabled={(!input.trim() && attachments.length === 0) || isLoading} 
+                className="absolute right-3 bottom-3 bg-brand-orange text-white p-3 rounded-2xl hover:bg-brand-hover hover:scale-110 active:scale-95 transition-all disabled:opacity-50 shadow-md"
+              >
+                <Send className="h-6 w-6" />
+              </button>
             </div>
           </div>
         </div>

@@ -130,23 +130,26 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleDelete = async (id: string, storagePath?: string) => {
-    const collectionName = activeTab === 'manage-pyqs' ? 'pyqs' : activeTab === 'manage-notes' ? 'notes' : 'announcements';
+    const table = activeTab === 'manage-pyqs' ? 'pyqs' : activeTab === 'manage-notes' ? 'notes' : 'announcements';
+    console.log(`Deleting from ${table} with ID: ${id}`);
+
     if (!confirm('Are you sure you want to delete this specific item? This action is irreversible.')) return;
 
     try {
-      await deleteDoc(doc(db, collectionName, id));
+      await deleteDoc(doc(db, table, id));
+      console.log('Document deleted from Firestore.');
 
       if (storagePath) {
         const fileRef = ref(storage, storagePath);
-        await deleteObject(fileRef).catch(e => console.log('File deletion issue:', e));
+        await deleteObject(fileRef).catch(e => console.warn('Storage delete fail (likely missing):', e));
       }
 
-      setSuccessMsg('Record erased successfully.');
+      setSuccessMsg(`Deleted from ${table} successfully.`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err: any) {
-      console.error(err);
-      alert('Failed to delete record.');
-      handleFirestoreError(err, 'delete', `${collectionName}/${id}`);
+      console.error('CRITICAL DELETE ERROR:', err);
+      alert(`System Error: ${err.message || 'Unknown error during deletion'}`);
+      handleFirestoreError(err, 'delete', `${table}/${id}`);
     }
   };
 
@@ -199,7 +202,7 @@ const AdminDashboard: React.FC = () => {
                   : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-navy-800'
               }`}
             >
-              <Megaphone className="h-4 w-4" /> Announcements
+              <Megaphone className="h-4 w-4" /> Manage Announcements
             </button>
           </div>
 
@@ -353,28 +356,43 @@ const AdminDashboard: React.FC = () => {
                                 <h4 className="font-bold text-navy-900 dark:text-white line-clamp-1 group-hover/item:text-brand-orange transition-colors">{item.title}</h4>
                                 <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">{item.departmentId} • Sem {item.semester} • {item.year}</p>
                             </div>
-                            <button onClick={() => handleDelete(item.id, item.storagePath)} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                            <button 
+                                onClick={() => handleDelete(item.id, item.storagePath)} 
+                                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 transition-all hover:scale-110 active:scale-95"
+                                title="Delete Record"
+                            >
                                 <Trash2 className="h-5 w-5" />
                             </button>
                         </div>
                     ))}
 
                     {!isLoadingData && activeTab === 'manage-notes' && notes.map(item => (
-                        <div key={item.id} className="bg-white dark:bg-navy-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 flex items-center justify-between gap-4 group/item hover:border-brand-orange/50 transition-colors">
+                        <div key={item.id} className="bg-white dark:bg-navy-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 flex items-center justify-between gap-4 hover:border-brand-orange/50 transition-colors">
                             <div className="min-w-0">
-                                <h4 className="font-bold text-navy-900 dark:text-white line-clamp-1 group-hover/item:text-brand-orange transition-colors">{item.title}</h4>
+                                <h4 className="font-bold text-navy-900 dark:text-white line-clamp-1">{item.title}</h4>
                                 <p className="text-xs text-gray-500 mt-1 font-medium italic">By {item.author} • {item.departmentId}</p>
                             </div>
-                            <button onClick={() => handleDelete(item.id, item.storagePath)} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                            <button 
+                                onClick={() => handleDelete(item.id, item.storagePath)} 
+                                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 transition-all hover:scale-110 active:scale-95"
+                                title="Delete Record"
+                            >
                                 <Trash2 className="h-5 w-5" />
                             </button>
                         </div>
                     ))}
 
                     {!isLoadingData && activeTab === 'manage-announcements' && announcements.map(item => (
-                        <div key={item.id} className="bg-white dark:bg-navy-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 flex items-center justify-between gap-4 group/item hover:border-brand-orange/50 transition-colors">
-                            <p className="text-sm text-navy-900 dark:text-gray-300 line-clamp-2">{item.text}</p>
-                            <button onClick={() => handleDelete(item.id)} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                        <div key={item.id} className="bg-white dark:bg-navy-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-navy-800 flex items-center justify-between gap-4 hover:border-brand-orange/50 transition-colors">
+                            <div className="min-w-0">
+                                <p className="text-xs font-bold text-brand-orange uppercase mb-1">Announcement</p>
+                                <p className="text-sm text-navy-900 dark:text-gray-300 line-clamp-2">{item.text}</p>
+                            </div>
+                            <button 
+                                onClick={() => handleDelete(item.id)} 
+                                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 transition-all hover:scale-110 active:scale-95"
+                                title="Delete Announcement"
+                            >
                                 <Trash2 className="h-5 w-5" />
                             </button>
                         </div>
