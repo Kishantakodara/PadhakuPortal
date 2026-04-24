@@ -1,10 +1,10 @@
 {
-  "projectId": "gen-lang-client-0165847465",
-  "appId": "1:540943312548:web:9f1b60756bcaa03359a831",
-  "apiKey": "AIzaSyB7k1r5xnd-CHyhG2gvmSWjGcTaemdbmtA",
-  "authDomain": "gen-lang-client-0165847465.firebaseapp.com",
+  "projectId": "padhakuportal",
+  "appId": "1:690270107032:web:21e1a3a6912d4767b267ed",
+  "apiKey": "AIzaSyAinLgzO47GseuYyzPPZCWDHPP5xPPehCg",
+  "authDomain": "padhakuportal.firebaseapp.com",
   "firestoreDatabaseId": "ai-studio-ff459622-8ab1-4a63-9145-5a9509ec93fc",
-  "storageBucket": "gen-lang-client-0165847465.firebasestorage.app",
-  "messagingSenderId": "540943312548",
+  "storageBucket": "padhakuportal.firebasestorage.app",
+  "messagingSenderId": "690270107032",
   "measurementId": ""
 }

@@ -21,12 +21,14 @@ const AdminLogin: React.FC = () => {
       navigate('/admin/dashboard');
     } catch (err: any) {
       console.error(err);
-      if (err.code === 'auth/operation-not-allowed') {
+      if (err.message?.includes('app-check-token-is-invalid') || err.code === 'auth/internal-error') {
+        setError('App Check is blocking your login. Please go to the Firebase Console > App Check > APIs and "Unenforce" Authentication and Firestore for development.');
+      } else if (err.code === 'auth/operation-not-allowed') {
         setError('Email/Password login is not enabled in Firebase Console. Please enable it in Authentication > Sign-in method.');
       } else if (err.code === 'auth/invalid-credential') {
         setError('Invalid email or password. Please try again.');
       } else {
-        setError('Failed to log in. Please check your credentials.');
+        setError('Failed to log in. Please check your credentials or network connection.');
       }
     } finally {
       setIsLoading(false);
@@ -43,7 +45,9 @@ const AdminLogin: React.FC = () => {
       navigate('/admin/dashboard');
     } catch (err: any) {
       console.error(err);
-      if (err.code !== 'auth/popup-closed-by-user') {
+      if (err.message?.includes('app-check-token-is-invalid') || err.code === 'auth/internal-error') {
+        setError('App Check is blocking your login. Please go to the Firebase Console > App Check > APIs and "Unenforce" Authentication for development.');
+      } else if (err.code !== 'auth/popup-closed-by-user') {
         setError('Failed to authenticate with Google.');
       }
     } finally {

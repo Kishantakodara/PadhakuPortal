@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2 } from 'lucide-react';
+import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2, ShoppingBag, Tag, Calculator, Cpu } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import * as Icons from 'lucide-react';
 import AdPlaceholder from '../components/AdPlaceholder';
@@ -225,6 +225,50 @@ const Home: React.FC = () => {
                  <AdPlaceholder size="rectangle" className="h-full min-h-[300px] rounded-3xl shadow-none border border-dashed border-gray-300 dark:border-navy-700 bg-gray-50/50 dark:bg-navy-900/50" label="Sponsored" />
             </div>
          </div>
+      </div>
+      
+      {/* Marketplace Section - "The Padhaku Bazaar" */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 animate-slide-up delay-400">
+          <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-navy-900 dark:to-navy-950 rounded-[2.5rem] border border-indigo-100 dark:border-navy-800 p-8 md:p-12 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-indigo-300/30 transition-colors pointer-events-none" />
+              
+              <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+                  <div className="max-w-md text-left">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider mb-4">
+                         <ShoppingBag className="h-3 w-3" /> New Marketplace
+                      </div>
+                      <h2 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-4 leading-tight">The Padhaku Bazaar</h2>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 font-medium">
+                        Buy & sell study materials, scientific calculators, lab equipment, and more. Exclusively for students.
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                         <button className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
+                            Explore Deals
+                         </button>
+                         <button className="bg-white dark:bg-navy-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-navy-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-navy-700 transition-all active:scale-95">
+                            Sell Your Gear
+                         </button>
+                      </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 w-full lg:w-auto">
+                      {[ 
+                          { icon: BookOpen, label: 'Textbooks', color: 'bg-blue-100 text-blue-600', count: '120+ Items' },
+                          { icon: Calculator, label: 'Lab Gear', color: 'bg-orange-100 text-orange-600', count: '45+ Items' },
+                          { icon: Cpu, label: 'Electronics', color: 'bg-purple-100 text-purple-600', count: '32+ Items' },
+                          { icon: Tag, label: 'Stationery', color: 'bg-green-100 text-green-600', count: '80+ Items' },
+                      ].map((item, i) => (
+                          <div key={i} className="bg-white dark:bg-navy-800 p-6 rounded-2xl border border-gray-100 dark:border-navy-700 hover:shadow-xl transition-all cursor-pointer group/card border-b-4 border-b-transparent hover:border-b-indigo-500 text-left">
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${item.color} bg-opacity-20 transition-transform group-hover/card:scale-110`}>
+                                  <item.icon className="h-6 w-6" />
+                              </div>
+                              <h4 className="font-bold text-navy-900 dark:text-white text-base">{item.label}</h4>
+                              <p className="text-xs text-gray-400 mt-1">{item.count}</p>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+          </div>
       </div>
 
       {/* Departments */}

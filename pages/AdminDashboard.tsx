@@ -75,6 +75,7 @@ const AdminDashboard: React.FC = () => {
 
     try {
       if (activeTab === 'manage-announcements') {
+        console.log('Publishing announcement...');
         await addDoc(collection(db, 'announcements'), {
           text: announcementText,
           createdAt: serverTimestamp()
@@ -82,9 +83,15 @@ const AdminDashboard: React.FC = () => {
         setAnnouncementText('');
         setSuccessMsg('Announcement posted successfully!');
       } else {
+        console.log(`Uploading file for ${activeTab}...`);
         // Upload File to Storage
         const fileRef = ref(storage, `uploads/${activeTab}/${Date.now()}_${file!.name}`);
-        const snapshot = await uploadBytes(fileRef, file!);
+        const snapshot = await uploadBytes(fileRef, file!).catch(err => {
+          console.error("Storage Upload Failed:", err);
+          throw new Error(`Storage Error: ${err.message}. Ensure Firebase Storage is enabled and rules allow uploads.`);
+        });
+        
+        console.log('File uploaded, getting download URL...');
         const downloadUrl = await getDownloadURL(snapshot.ref);
 
         const commonData = {
@@ -98,6 +105,7 @@ const AdminDashboard: React.FC = () => {
           likes: 0
         };
 
+        console.log('Saving document to Firestore...');
         if (activeTab === 'manage-pyqs') {
           await addDoc(collection(db, 'pyqs'), {
             ...commonData,
@@ -121,8 +129,9 @@ const AdminDashboard: React.FC = () => {
       
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err: any) {
-      console.error(err);
+      console.error("PUBLISH ERROR:", err);
       setErrorMsg(err.message || 'Failed to upload/save data');
+      alert(`System Error: ${err.message || 'Failed to publish'}`);
       handleFirestoreError(err, 'create', collectionName);
     } finally {
       setIsSubmitting(false);
