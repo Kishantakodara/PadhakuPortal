@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer components {
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+
+  /* Background Patterns */
+  .bg-grid {
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Markdown Styles */
+  .prose p { margin-bottom: 1em; line-height: 1.7; }
+  .prose ul, .prose ol { padding-left: 1.25em; margin-bottom: 1em; }
+  .prose li { margin-bottom: 0.5em; list-style-type: disc; }
+  .prose strong { font-weight: 700; color: #0f172a; }
+  .dark .prose strong { color: #f8fafc; }
+  .prose code { background-color: rgba(249, 115, 22, 0.1); padding: 0.2em 0.4em; border-radius: 0.3em; font-family: monospace; font-size: 0.9em; color: #ea580c; font-weight: 500; }
+  .dark .prose code { background-color: rgba(249, 115, 22, 0.2); color: #fb923c; }
+  .prose blockquote { border-left: 4px solid #cbd5e1; padding-left: 1em; font-style: italic; color: #64748b; }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}

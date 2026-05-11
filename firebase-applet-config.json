@@ -1,10 +1,10 @@
 {
   "projectId": "padhakuportal",
-  "appId": "1:690270107032:web:21e1a3a6912d4767b267ed",
+  "appId": "1:690270107032:web:9925c7044681257bb267ed",
   "apiKey": "AIzaSyAinLgzO47GseuYyzPPZCWDHPP5xPPehCg",
   "authDomain": "padhakuportal.firebaseapp.com",
   "firestoreDatabaseId": "ai-studio-ff459622-8ab1-4a63-9145-5a9509ec93fc",
   "storageBucket": "padhakuportal.firebasestorage.app",
   "messagingSenderId": "690270107032",
-  "measurementId": ""
+  "measurementId": "G-TGW3ZZ4NNT"
 }

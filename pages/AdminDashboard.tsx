@@ -4,10 +4,10 @@ import { DEPARTMENTS, SEMESTERS, YEARS } from '../constants';
 import { PaperType } from '../types';
 import { db, storage, auth } from '../utils/firebase';
 import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { handleFirestoreError } from '../utils/errorHandlers';
+import { supabase } from '../supabaseClient';
 
 type Tab = 'manage-pyqs' | 'manage-notes' | 'manage-announcements';
 
@@ -83,23 +83,30 @@ const AdminDashboard: React.FC = () => {
         setAnnouncementText('');
         setSuccessMsg('Announcement posted successfully!');
       } else {
-        console.log(`Uploading file for ${activeTab}...`);
-        // Upload File to Storage
-        const fileRef = ref(storage, `uploads/${activeTab}/${Date.now()}_${file!.name}`);
-        const snapshot = await uploadBytes(fileRef, file!).catch(err => {
-          console.error("Storage Upload Failed:", err);
-          throw new Error(`Storage Error: ${err.message}. Ensure Firebase Storage is enabled and rules allow uploads.`);
-        });
+        console.log(`Uploading file for ${activeTab} to Supabase Storage...`);
+        const fileName = `uploads/${activeTab}/${Date.now()}_${file!.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         
-        console.log('File uploaded, getting download URL...');
-        const downloadUrl = await getDownloadURL(snapshot.ref);
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('Document')
+          .upload(fileName, file!);
+
+        if (uploadError) {
+          console.error("Supabase Storage Upload Failed:", uploadError);
+          throw new Error(`Storage Error: ${uploadError.message}`);
+        }
+        
+        console.log('File uploaded, getting public URL...');
+        const { data: urlData } = supabase.storage.from('Document').getPublicUrl(fileName);
+        const downloadUrl = urlData.publicUrl;
+        const storagePath = fileName;
+
 
         const commonData = {
           title,
           departmentId: department,
           semester,
           pdfUrl: downloadUrl,
-          storagePath: snapshot.ref.fullPath,
+          storagePath: storagePath,
           createdAt: serverTimestamp(),
           views: 0,
           likes: 0
@@ -149,8 +156,7 @@ const AdminDashboard: React.FC = () => {
       console.log('Document deleted from Firestore.');
 
       if (storagePath) {
-        const fileRef = ref(storage, storagePath);
-        await deleteObject(fileRef).catch(e => console.warn('Storage delete fail (likely missing):', e));
+        await supabase.storage.from('Document').remove([storagePath]).catch(e => console.warn('Supabase delete fail:', e));
       }
 
       setSuccessMsg(`Deleted from ${table} successfully.`);
