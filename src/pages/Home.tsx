@@ -67,7 +67,7 @@ const Home: React.FC = () => {
              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Semester 4 exams approaching!</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight animate-slide-up">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight animate-fade-in-up-delay-1 opacity-0">
             <Link to="/" className="group inline-flex flex-col items-center">
               <span className="text-sm font-bold text-brand-orange mb-2 tracking-[0.3em] uppercase opacity-80 group-hover:opacity-100 transition-opacity">PadhakuPortal</span>
               <span>The Smarter Way</span>
@@ -76,12 +76,12 @@ const Home: React.FC = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-500">to Study.</span>
           </h1>
           
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed animate-slide-up delay-100">
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up-delay-2 opacity-0">
              Everything you need to ace your college exams in one place. 
              <span className="font-semibold text-navy-900 dark:text-white"> PYQs, Notes, and AI Help.</span>
           </p>
           
-          <div className="animate-slide-up delay-200">
+          <div className="animate-fade-in-up-delay-2 opacity-0">
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group z-20">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400 group-focus-within:text-brand-orange transition-colors" />
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                 className="block w-full pl-12 pr-32 py-5 rounded-2xl border-2 border-transparent bg-white dark:bg-navy-800/80 text-gray-900 placeholder-gray-400 shadow-[0_8px_30px_rgb(0,0,0,0.04)] focus:border-brand-orange/30 focus:ring-4 focus:ring-brand-orange/10 transition-all dark:text-white dark:placeholder-gray-500 backdrop-blur-xl"
               />
               <div className="absolute inset-y-2 right-2">
-                 <button type="submit" className="h-full bg-navy-900 text-white px-6 rounded-xl font-medium hover:bg-navy-800 transition-all hover:scale-105 shadow-lg shadow-navy-900/20 flex items-center gap-2 dark:bg-brand-orange dark:hover:bg-brand-hover">
+                 <button type="submit" className="h-full bg-navy-900 text-white px-6 rounded-xl font-medium hover:bg-navy-800 transition-all hover:scale-105 shadow-lg shadow-navy-900/20 flex items-center gap-2 dark:bg-brand-orange dark:hover:bg-brand-hover animate-pulse-slow">
                     Ask AI
                  </button>
               </div>
@@ -119,9 +119,9 @@ const Home: React.FC = () => {
       </div>
 
       {/* Quick Access - Colorful Cards */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 animate-slide-up delay-300 mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 mb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link to="/pyqs" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800">
+          <Link to="/pyqs" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up opacity-0">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 dark:bg-blue-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
             <div className="relative z-10">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:rotate-6 transition-transform">
@@ -135,7 +135,7 @@ const Home: React.FC = () => {
             </div>
           </Link>
 
-          <Link to="/notes" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800">
+          <Link to="/notes" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up-delay-1 opacity-0">
             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 dark:bg-orange-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
             <div className="relative z-10">
               <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-2xl flex items-center justify-center text-brand-orange mb-6 group-hover:rotate-6 transition-transform">
@@ -152,7 +152,7 @@ const Home: React.FC = () => {
           {/* Featured Card - Adaptive Style (Light/Dark) */}
           <div 
             id="featured-card-tips"
-            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 cursor-pointer"
+            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 cursor-pointer animate-fade-in-up-delay-2 opacity-0"
           >
             <div 
               className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-yellow-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" 
@@ -228,7 +228,7 @@ const Home: React.FC = () => {
       </div>
       
       {/* Marketplace Section - "The Padhaku Bazaar" */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 animate-slide-up delay-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 animate-fade-in-up opacity-0">
           <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-navy-900 dark:to-navy-950 rounded-[2.5rem] border border-indigo-100 dark:border-navy-800 p-8 md:p-12 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-indigo-300/30 transition-colors pointer-events-none" />
               
