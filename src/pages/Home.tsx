@@ -64,7 +64,7 @@ const Home: React.FC = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
              </span>
-             <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Semester 5 exams approaching!</span>
+             <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Semester 4 exams approaching!</span>
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight animate-slide-up">
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
                         </div>
                         <h2 className="text-xl font-bold text-navy-900 dark:text-white">Notice Board</h2>
                     </div>
-                    <button className="text-sm text-gray-500 hover:text-navy-900 font-medium">View All</button>
+                    <button onClick={() => alert('Notice board coming soon!')} className="text-sm text-gray-500 hover:text-navy-900 font-medium">View All</button>
                 </div>
                 <div className="space-y-3">
                     {loadingAnnouncements ? (
@@ -242,10 +242,10 @@ const Home: React.FC = () => {
                         Buy & sell study materials, scientific calculators, lab equipment, and more. Exclusively for students.
                       </p>
                       <div className="flex flex-wrap gap-4">
-                         <button className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
+                         <button onClick={() => alert('Marketplace coming soon!')} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
                             Explore Deals
                          </button>
-                         <button className="bg-white dark:bg-navy-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-navy-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-navy-700 transition-all active:scale-95">
+                         <button onClick={() => alert('Marketplace coming soon!')} className="bg-white dark:bg-navy-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-navy-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-navy-700 transition-all active:scale-95">
                             Sell Your Gear
                          </button>
                       </div>
@@ -314,9 +314,9 @@ const Home: React.FC = () => {
                <Link to="/contribute" className="bg-brand-orange text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-hover transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-1 text-center">
                  Upload Notes
                </Link>
-               <button className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-center">
+               <a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-center flex items-center justify-center">
                  Join Community
-               </button>
+               </a>
              </div>
           </div>
       </div>

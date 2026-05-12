@@ -76,6 +76,7 @@ const AIChat: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get('q');
@@ -83,7 +84,7 @@ const AIChat: React.FC = () => {
 
   useEffect(() => {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyAyoz44Hz5cSkK5KwW5GtthL1HuQfhduSM" });
       const resourceContext = `
       Library Materials:
       Departments: ${DEPARTMENTS.map(d => `${d.name} (${d.code})`).join(', ')}.
@@ -111,7 +112,12 @@ const AIChat: React.FC = () => {
   }, []);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   };
 
   useEffect(() => {
@@ -221,7 +227,7 @@ const AIChat: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth">
         {messages.map((msg, index) => (
           <div key={index} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm ${msg.role === 'user' ? 'bg-navy-900 dark:bg-white text-white dark:text-navy-900' : 'bg-brand-orange text-white'}`}>

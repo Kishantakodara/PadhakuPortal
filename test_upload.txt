@@ -1,3 +1,0 @@
-This is a test document about Data Structures.
-Trees and Graphs are very important data structures.
-A binary tree has a root node and each node has up to two children.

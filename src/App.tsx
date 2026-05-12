@@ -12,10 +12,12 @@ import Contribute from './pages/Contribute';
 import AIChat from './pages/AIChat';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <Layout>
           <Routes>
