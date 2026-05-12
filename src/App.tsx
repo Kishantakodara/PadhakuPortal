@@ -10,6 +10,11 @@ import AdminDashboard from './pages/AdminDashboard'; // Replacing AdminUpload
 import AdminLogin from './pages/AdminLogin';
 import Contribute from './pages/Contribute';
 import AIChat from './pages/AIChat';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import Disclaimer from './pages/Disclaimer';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
@@ -27,6 +32,13 @@ const App: React.FC = () => {
             <Route path="/notes/:id" element={<NoteView />} />
             <Route path="/ai-tutor" element={<AIChat />} />
             <Route path="/contribute" element={<Contribute />} />
+            
+            {/* Legal / AdSense Pages */}
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
             
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={

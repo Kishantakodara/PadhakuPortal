@@ -135,20 +135,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
 
                 <div>
-                    <h4 className="font-bold text-navy-900 dark:text-white mb-4">Community</h4>
+                    <h4 className="font-bold text-navy-900 dark:text-white mb-4">PadhakuPortal</h4>
                     <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                         <li><Link to="/about" className="hover:text-brand-orange transition-colors">About Us</Link></li>
+                         <li><Link to="/contact" className="hover:text-brand-orange transition-colors">Contact Us</Link></li>
                          <li><Link to="/contribute" className="hover:text-brand-orange transition-colors">Contribute Material</Link></li>
-                         <li><a href="#" className="hover:text-brand-orange transition-colors">Telegram Group</a></li>
-                         <li><a href="#" className="hover:text-brand-orange transition-colors">Student Leaders</a></li>
+                         <li><a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Join Community</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h4 className="font-bold text-navy-900 dark:text-white mb-4">Legal</h4>
                      <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                         <li><a href="#" className="hover:text-brand-orange transition-colors">Privacy Policy</a></li>
-                         <li><a href="#" className="hover:text-brand-orange transition-colors">Terms of Service</a></li>
-                         <li><Link to="/admin" className="hover:text-brand-orange transition-colors">Admin Login</Link></li>
+                         <li><Link to="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</Link></li>
+                         <li><Link to="/terms-of-service" className="hover:text-brand-orange transition-colors">Terms of Service</Link></li>
+                         <li><Link to="/disclaimer" className="hover:text-brand-orange transition-colors">Disclaimer</Link></li>
+                         <li><Link to="/admin" className="hover:text-brand-orange transition-colors mt-2 block opacity-50 hover:opacity-100">Admin Login</Link></li>
                     </ul>
                 </div>
             </div>
