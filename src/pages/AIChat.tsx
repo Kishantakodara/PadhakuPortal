@@ -49,7 +49,7 @@ const MarkdownLite: React.FC<{ text: string }> = ({ text }) => {
     }
 
     if (!line.trim()) return <div key={index} className="h-1" />;
-    
+
     return (
       <p key={index} className="mb-1 last:mb-0">
         {processInline(line)}
@@ -63,21 +63,21 @@ const MarkdownLite: React.FC<{ text: string }> = ({ text }) => {
 
 const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      role: 'model', 
-      text: "Hi there! I'm your **AI Study Companion**. \n\nI can help you with:\n- Solving homework problems (upload a photo!)\n- Explaining complex concepts\n- Finding resources in the library\n\nWhat are you working on today?" 
+    {
+      role: 'model',
+      text: "Hi there! I'm your **AI Study Companion**. \n\nI can help you with:\n- Solving homework problems (upload a photo!)\n- Explaining complex concepts\n- Finding resources in the library\n\nWhat are you working on today?"
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chatSession, setChatSession] = useState<Chat | null>(null);
   const [attachments, setAttachments] = useState<AttachmentData[]>([]);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get('q');
   const hasProcessedQuery = useRef(false);
@@ -126,9 +126,9 @@ const AIChat: React.FC = () => {
 
   useEffect(() => {
     if (chatSession && initialQuery && !hasProcessedQuery.current) {
-        hasProcessedQuery.current = true;
-        sendMessage(initialQuery, []);
-        setSearchParams({}, { replace: true }); 
+      hasProcessedQuery.current = true;
+      sendMessage(initialQuery, []);
+      setSearchParams({}, { replace: true });
     }
   }, [chatSession, initialQuery]);
 
@@ -159,10 +159,10 @@ const AIChat: React.FC = () => {
   };
 
   const sendMessage = async (text: string, currentAttachments: AttachmentData[]) => {
-     if ((!text.trim() && currentAttachments.length === 0) || isLoading || !chatSession) return;
-     
-    setMessages(prev => [...prev, { 
-      role: 'user', 
+    if ((!text.trim() && currentAttachments.length === 0) || isLoading || !chatSession) return;
+
+    setMessages(prev => [...prev, {
+      role: 'user',
       text: text,
       attachments: currentAttachments.length > 0 ? currentAttachments.map(att => ({
         name: att.file.name,
@@ -173,13 +173,13 @@ const AIChat: React.FC = () => {
     }]);
 
     setIsLoading(true);
-    
+
     try {
       const parts: any[] = [];
       if (text) parts.push({ text: text });
       else if (currentAttachments.length > 0) parts.push({ text: 'Analyze this.' });
       currentAttachments.forEach(att => {
-          parts.push({ inlineData: { mimeType: att.mimeType, data: att.base64 } });
+        parts.push({ inlineData: { mimeType: att.mimeType, data: att.base64 } });
       });
 
       const response: GenerateContentResponse = await chatSession.sendMessage({ message: parts });
@@ -189,8 +189,8 @@ const AIChat: React.FC = () => {
       }
     } catch (error: any) {
       const isRateLimit = String(error?.message || error).includes('429');
-      setMessages(prev => [...prev, { 
-        role: 'model', 
+      setMessages(prev => [...prev, {
+        role: 'model',
         text: isRateLimit ? "Usage limit hit. Please wait a moment." : "Error occurred. Please try again.",
         isError: true
       }]);
@@ -244,9 +244,8 @@ const AIChat: React.FC = () => {
                 </div>
               )}
               {msg.text && (
-                <div className={`px-5 py-3.5 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed ${
-                  msg.role === 'user' ? 'bg-navy-900 text-white rounded-tr-none dark:bg-brand-orange' : msg.isError ? 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/20 rounded-tl-none' : 'bg-white dark:bg-navy-800 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-navy-700 rounded-tl-none'
-                }`}>
+                <div className={`px-5 py-3.5 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed ${msg.role === 'user' ? 'bg-navy-900 text-white rounded-tr-none dark:bg-brand-orange' : msg.isError ? 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/20 rounded-tl-none' : 'bg-white dark:bg-navy-800 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-navy-700 rounded-tl-none'
+                  }`}>
                   <MarkdownLite text={msg.text} />
                 </div>
               )}
@@ -254,13 +253,13 @@ const AIChat: React.FC = () => {
           </div>
         ))}
         {isLoading && (
-           <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-sm"><Bot className="h-5 w-5 animate-pulse" /></div>
-              <div className="bg-white dark:bg-navy-800 border border-gray-100 dark:border-navy-700 px-5 py-4 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
-                 <Loader2 className="h-4 w-4 animate-spin text-brand-orange" />
-                 <span className="text-sm text-gray-500 dark:text-gray-400">Thinking...</span>
-              </div>
-           </div>
+          <div className="flex gap-4">
+            <div className="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-sm"><Bot className="h-5 w-5 animate-pulse" /></div>
+            <div className="bg-white dark:bg-navy-800 border border-gray-100 dark:border-navy-700 px-5 py-4 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin text-brand-orange" />
+              <span className="text-sm text-gray-500 dark:text-gray-400">Thinking...</span>
+            </div>
+          </div>
         )}
         <div ref={messagesEndRef} />
       </div>
@@ -275,8 +274,8 @@ const AIChat: React.FC = () => {
                     {att.mimeType.startsWith('image/') ? <img src={att.previewUrl} alt="Preview" className="h-full w-full object-cover" /> : <div className="h-full w-full flex items-center justify-center bg-red-100 dark:bg-red-900/30"><FileText className="h-5 w-5 text-red-500" /></div>}
                   </div>
                   <div className="flex flex-col min-w-0 flex-1">
-                      <span className="text-xs font-medium text-navy-900 dark:text-white truncate block pr-4" title={att.file.name}>{att.file.name}</span>
-                      <span className="text-[10px] text-gray-500 uppercase">{att.mimeType.split('/')[1]}</span>
+                    <span className="text-xs font-medium text-navy-900 dark:text-white truncate block pr-4" title={att.file.name}>{att.file.name}</span>
+                    <span className="text-[10px] text-gray-500 uppercase">{att.mimeType.split('/')[1]}</span>
                   </div>
                   <button onClick={() => removeAttachment(index)} className="absolute -top-2 -right-2 bg-white dark:bg-navy-800 text-gray-500 hover:text-red-500 border border-gray-200 dark:border-navy-700 rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity scale-90 hover:scale-100"><X className="h-3 w-3" /></button>
                 </div>
@@ -290,22 +289,22 @@ const AIChat: React.FC = () => {
               {attachments.length > 0 && <span className="absolute -top-1 -right-1 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm ring-2 ring-white dark:ring-navy-900 animate-bounce">{attachments.length}</span>}
             </button>
             <div className="relative flex-1">
-              <textarea 
-                ref={inputRef} 
-                value={input} 
-                onChange={(e) => { 
-                  setInput(e.target.value); 
-                  e.target.style.height = 'auto'; 
-                  e.target.style.height = e.target.scrollHeight + 'px'; 
-                }} 
-                onKeyDown={handleKeyDown} 
-                placeholder="Ask a question or upload files..." 
-                className="w-full bg-gray-100 dark:bg-navy-950 text-navy-900 dark:text-white border-0 rounded-[1.5rem] pl-5 pr-16 py-5 focus:ring-2 focus:ring-brand-orange resize-none max-h-48 shadow-inner text-base md:text-lg transition-all" 
-                rows={1} 
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = e.target.scrollHeight + 'px';
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask a question or upload files..."
+                className="w-full bg-gray-100 dark:bg-navy-950 text-navy-900 dark:text-white border-0 rounded-[1.5rem] pl-5 pr-16 py-5 focus:ring-2 focus:ring-brand-orange resize-none max-h-48 shadow-inner text-base md:text-lg transition-all"
+                rows={1}
               />
-              <button 
-                onClick={handleSend} 
-                disabled={(!input.trim() && attachments.length === 0) || isLoading} 
+              <button
+                onClick={handleSend}
+                disabled={(!input.trim() && attachments.length === 0) || isLoading}
                 className="absolute right-3 bottom-3 bg-brand-orange text-white p-3 rounded-2xl hover:bg-brand-hover hover:scale-110 active:scale-95 transition-all disabled:opacity-50 shadow-md"
               >
                 <Send className="h-6 w-6" />
