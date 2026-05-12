@@ -1,5 +1,4 @@
 <div align="center">
-  <img width="1200" alt="PadhakuPortal Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
   <br/>
   <h1>📚 Padhaku Portal</h1>
   <p><strong>A modern, AI-powered academic resource hub for students to access Notes, Previous Year Questions (PYQs), and study materials.</strong></p>
