@@ -54,8 +54,8 @@ const Home: React.FC = () => {
       <div id="hero" className="relative pt-10 pb-20 lg:pt-16 lg:pb-24">
         {/* Soft gradient blobs */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-6xl overflow-hidden z-[-1] opacity-60 dark:opacity-30 pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-200 dark:bg-blue-900 blur-[100px] animate-float" />
-            <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] rounded-full bg-orange-100 dark:bg-orange-900 blur-[100px] animate-float" style={{animationDelay: '2s'}} />
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-200 dark:bg-blue-900 blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-lighten" />
+            <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] rounded-full bg-orange-100 dark:bg-orange-900 blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-lighten" style={{animationDelay: '2s'}} />
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -205,7 +205,10 @@ const Home: React.FC = () => {
                                             ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() 
                                             : 'Just now'}
                                         </span>
-                                        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-navy-700 dark:text-blue-400">New</span>
+                                        <span className="relative overflow-hidden text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-navy-700 dark:text-blue-400 group-hover:shadow-sm">
+                                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[100%] group-hover:animate-shimmer" />
+                                            <span className="relative">New</span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +233,8 @@ const Home: React.FC = () => {
       {/* Marketplace Section - "The Padhaku Bazaar" */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 animate-fade-in-up opacity-0">
           <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-navy-900 dark:to-navy-950 rounded-[2.5rem] border border-indigo-100 dark:border-navy-800 p-8 md:p-12 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-indigo-300/30 transition-colors pointer-events-none" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -mr-20 -mt-20 animate-blob pointer-events-none mix-blend-multiply dark:mix-blend-lighten" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-200/20 rounded-full blur-2xl -ml-10 -mb-10 animate-blob animation-delay-2000 pointer-events-none mix-blend-multiply dark:mix-blend-lighten" style={{animationDelay: '3s'}} />
               
               <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
                   <div className="max-w-md text-left">
@@ -286,7 +290,7 @@ const Home: React.FC = () => {
                 to={`/pyqs?department=${dept.id}`}
                 className="flex flex-col items-center justify-center p-6 rounded-2xl bg-gray-50 dark:bg-navy-950 border border-gray-100 dark:border-navy-800 hover:bg-white hover:shadow-lg hover:border-gray-200 dark:hover:bg-navy-800 transition-all group"
               >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${dept.color} bg-opacity-10 dark:bg-opacity-20 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${dept.color} bg-opacity-10 dark:bg-opacity-20 group-hover:scale-110 group-hover:animate-wiggle transition-transform duration-300`}>
                   {renderIcon(dept.iconName)}
                 </div>
                 <h3 className="font-bold text-navy-900 dark:text-white text-sm text-center">{dept.name}</h3>
@@ -301,8 +305,8 @@ const Home: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="bg-gradient-to-r from-navy-900 to-blue-900 dark:from-navy-800 dark:to-navy-900 rounded-[2.5rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between relative overflow-hidden shadow-2xl text-center md:text-left">
              {/* Abstract Shapes */}
-             <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-             <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-orange opacity-10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
+             <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none animate-blob mix-blend-overlay"></div>
+             <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-orange opacity-20 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none animate-blob mix-blend-overlay" style={{animationDelay: '2s'}}></div>
 
              <div className="relative z-10 max-w-xl">
                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-display">Share your Knowledge</h2>
@@ -311,8 +315,9 @@ const Home: React.FC = () => {
                </p>
              </div>
              <div className="relative z-10 flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-               <Link to="/contribute" className="bg-brand-orange text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-hover transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-1 text-center">
-                 Upload Notes
+               <Link to="/contribute" className="relative overflow-hidden bg-brand-orange text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-hover transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-1 text-center group">
+                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:animate-shimmer" />
+                 <span className="relative">Upload Notes</span>
                </Link>
                <a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-center flex items-center justify-center">
                  Join Community
