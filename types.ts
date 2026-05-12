@@ -52,7 +52,9 @@ export interface Note {
   semester: number;
   author: string;
   lastUpdated: string;
-  sections: NoteSection[];
+  sections?: NoteSection[];
+  pdfUrl?: string;
+  storagePath?: string;
   views: number;
   status: ApprovalStatus;
   submittedBy?: string;

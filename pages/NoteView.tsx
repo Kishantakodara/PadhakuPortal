@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool } from 'lucide-react';
+import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
@@ -57,8 +57,9 @@ const NoteView: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!note) return;
+    if (!note || !note.sections) return;
     const handleScroll = () => {
+      if (!note.sections) return;
       const sections = note.sections.map(s => document.getElementById(s.id));
       const scrollPosition = window.scrollY + 150; 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -78,7 +79,7 @@ const NoteView: React.FC = () => {
     setIsGeneratingCards(true);
     
     // Combine note content for context
-    const fullText = note.sections.map(s => s.title + ": " + s.content).join("\n\n");
+    const fullText = note.sections ? note.sections.map(s => s.title + ": " + s.content).join("\n\n") : "Please provide a summary of this document based on the title: " + note.title;
     
     try {
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
@@ -239,7 +240,17 @@ const NoteView: React.FC = () => {
 
                 {/* Content */}
                 <div className="prose prose-lg prose-slate dark:prose-invert max-w-none font-serif">
-                    {note.sections.map((section) => (
+                    {note.pdfUrl ? (
+                      <div className="flex flex-col items-center justify-center py-10 bg-gray-50 dark:bg-navy-800 rounded-2xl border border-gray-100 dark:border-navy-700">
+                        <FileText className="h-16 w-16 text-brand-orange mb-4" />
+                        <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-2">Document Attached</h3>
+                        <p className="text-gray-500 mb-6 text-center max-w-md">This note contains a PDF document. You can open it in a new tab to view or download.</p>
+                        <a href={note.pdfUrl} target="_blank" rel="noopener noreferrer" className="bg-brand-orange hover:bg-brand-hover text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md inline-flex items-center gap-2">
+                          <FileText className="h-5 w-5" /> Open PDF Document
+                        </a>
+                      </div>
+                    ) : (
+                      note.sections?.map((section) => (
                         <section key={section.id} id={section.id} className="scroll-mt-32 mb-12">
                         <h2 className="text-2xl font-sans font-bold text-navy-900 dark:text-white mb-4 flex items-center gap-2 relative group">
                             <span className="absolute -left-8 top-1 opacity-0 group-hover:opacity-100 transition-opacity text-brand-orange/50 hidden lg:block">
@@ -254,7 +265,8 @@ const NoteView: React.FC = () => {
                             </p>
                         </div>
                         </section>
-                    ))}
+                      ))
+                    )}
                 </div>
                 
                 {/* Collaboration Modal (Inline) */}
@@ -304,7 +316,7 @@ const NoteView: React.FC = () => {
                    {/* Track Line */}
                    <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gray-100 dark:bg-navy-800" />
                    
-                  {note.sections.map((section) => (
+                  {note.sections && note.sections.map((section) => (
                     <button
                       key={section.id}
                       onClick={() => handleScrollTo(section.id)}
