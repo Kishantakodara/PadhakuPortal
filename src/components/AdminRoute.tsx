@@ -13,8 +13,14 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     return <Navigate to="/admin/login" replace />;
   }
 
-  // Strict email check mapping for user-provided email
-  if (currentUser.email?.toLowerCase() !== 'kishantakodara4@gmail.com') {
+  // Strict email check mapping for user-provided emails
+  const allowedAdmins = [
+    'kishantakodara4@gmail.com',
+    'ayushpandey102006@gmail.com',
+    'padhakuportal@gmail.com'
+  ];
+
+  if (!currentUser.email || !allowedAdmins.includes(currentUser.email.toLowerCase())) {
     return <Navigate to="/admin/login" replace />;
   }
 
