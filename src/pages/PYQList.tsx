@@ -56,7 +56,7 @@ const PYQList: React.FC = () => {
       const matchSearch = pyq.title.toLowerCase().includes(filters.search.toLowerCase());
       return isPublished && matchDept && matchSem && matchYear && matchType && matchSearch;
     });
-  }, [filters]);
+  }, [filters, pyqs]);
 
   const handleFilterChange = (key: keyof FilterState, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));

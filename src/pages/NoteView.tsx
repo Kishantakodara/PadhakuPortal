@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText } from 'lucide-react';
+import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText, Eye, X } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
@@ -47,6 +47,7 @@ const NoteView: React.FC = () => {
   // Collaboration State
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestion, setSuggestion] = useState('');
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   const handleScrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -241,14 +242,52 @@ const NoteView: React.FC = () => {
                 {/* Content */}
                 <div className="prose prose-lg prose-slate dark:prose-invert max-w-none font-serif">
                     {note.pdfUrl ? (
-                      <div className="flex flex-col items-center justify-center py-10 bg-gray-50 dark:bg-navy-800 rounded-2xl border border-gray-100 dark:border-navy-700">
-                        <FileText className="h-16 w-16 text-brand-orange mb-4" />
-                        <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-2">Document Attached</h3>
-                        <p className="text-gray-500 mb-6 text-center max-w-md">This note contains a PDF document. You can open it in a new tab to view or download.</p>
-                        <a href={note.pdfUrl} target="_blank" rel="noopener noreferrer" className="bg-brand-orange hover:bg-brand-hover text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md inline-flex items-center gap-2">
-                          <FileText className="h-5 w-5" /> Open PDF Document
-                        </a>
-                      </div>
+                      <>
+                        <div className="flex flex-col items-center justify-center py-10 bg-gray-50 dark:bg-navy-800 rounded-2xl border border-gray-100 dark:border-navy-700">
+                          <FileText className="h-16 w-16 text-brand-orange mb-4" />
+                          <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-2">Document Attached</h3>
+                          <p className="text-gray-500 mb-6 text-center max-w-md">This note contains a PDF document. You can preview it full-screen directly on the website.</p>
+                          <button 
+                            onClick={() => setIsFullscreen(true)} 
+                            className="bg-brand-orange hover:bg-brand-hover text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md inline-flex items-center gap-2"
+                          >
+                            <Eye className="h-5 w-5" /> Preview Document
+                          </button>
+                        </div>
+                        
+                        {isFullscreen && (
+                          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 animate-fade-in">
+                            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsFullscreen(false)} />
+                            <div className="relative bg-white dark:bg-navy-900 shadow-2xl w-full h-full max-w-none rounded-none p-0 flex flex-col transform transition-all duration-300 scale-100 overflow-hidden">
+                              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-orange to-red-500 z-20" />
+                              <button 
+                                onClick={() => setIsFullscreen(false)}
+                                className="absolute top-3 right-4 text-gray-400 hover:text-navy-900 dark:hover:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-navy-800 transition-colors z-20"
+                              >
+                                <X className="h-5 w-5" />
+                              </button>
+                              <div className="flex flex-col h-full w-full bg-gray-100 dark:bg-navy-950">
+                                <div className="bg-white dark:bg-navy-900 flex items-center justify-between p-4 pr-16 border-b border-gray-200 dark:border-navy-700 z-10 shadow-sm relative">
+                                  <h3 className="text-xl font-bold text-navy-900 dark:text-white truncate">{note.title}</h3>
+                                  <button 
+                                    onClick={() => setIsFullscreen(false)}
+                                    className="text-sm font-bold text-brand-orange hover:bg-orange-50 dark:hover:bg-navy-800 px-3 py-1.5 rounded-lg transition-colors shrink-0"
+                                  >
+                                    Close Preview
+                                  </button>
+                                </div>
+                                <div className="flex-1 w-full overflow-hidden">
+                                  <iframe 
+                                    src={`${note.pdfUrl}#toolbar=0`} 
+                                    className="w-full h-full border-0" 
+                                    title={note.title}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       note.sections?.map((section) => (
                         <section key={section.id} id={section.id} className="scroll-mt-32 mb-12">
