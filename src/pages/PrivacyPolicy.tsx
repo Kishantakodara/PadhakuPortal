@@ -42,9 +42,15 @@ const PrivacyPolicy: React.FC = () => {
             Like any other website, PadhakuPortal uses "cookies". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">5. Google DoubleClick DART Cookie</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">5. Advertising Partners Privacy Policies</h2>
           <p>
-            Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to our site and other sites on the internet. However, visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy.
+            Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to PadhakuPortal or other websites.
+          </p>
+          <p className="mt-4">
+            Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our site and/or other sites on the Internet.
+          </p>
+          <p className="mt-4">
+            Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="http://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">www.aboutads.info</a>.
           </p>
         </div>
       </div>

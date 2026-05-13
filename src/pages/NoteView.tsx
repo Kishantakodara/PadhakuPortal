@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText, Eye, X } from 'lucide-react';
+import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText, Eye, X, Download } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
@@ -269,12 +269,19 @@ const NoteView: React.FC = () => {
                               <div className="flex flex-col h-full w-full bg-gray-100 dark:bg-navy-950">
                                 <div className="bg-white dark:bg-navy-900 flex items-center justify-between p-4 pr-16 border-b border-gray-200 dark:border-navy-700 z-10 shadow-sm relative">
                                   <h3 className="text-xl font-bold text-navy-900 dark:text-white truncate">{note.title}</h3>
-                                  <button 
-                                    onClick={() => setIsFullscreen(false)}
-                                    className="text-sm font-bold text-brand-orange hover:bg-orange-50 dark:hover:bg-navy-800 px-3 py-1.5 rounded-lg transition-colors shrink-0"
-                                  >
-                                    Close Preview
-                                  </button>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {note.pdfUrl && (
+                                      <a href={note.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-500 hover:text-brand-orange hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-navy-800 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2" title="Download PDF">
+                                        <Download className="h-4 w-4" /> <span className="hidden sm:inline">Download</span>
+                                      </a>
+                                    )}
+                                    <button 
+                                      onClick={() => setIsFullscreen(false)}
+                                      className="text-sm font-bold text-brand-orange hover:bg-orange-50 dark:hover:bg-navy-800 px-3 py-1.5 rounded-lg transition-colors"
+                                    >
+                                      Close Preview
+                                    </button>
+                                  </div>
                                 </div>
                                 <div className="flex-1 w-full overflow-hidden">
                                   <iframe 

@@ -18,6 +18,7 @@ import Disclaimer from './pages/Disclaimer';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
+import BulkUpload from './pages/BulkUpload';
 
 const App: React.FC = () => {
   return (
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
             
+            <Route path="/bulk-upload" element={<BulkUpload />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={
               <AdminRoute>
