@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import PYQList from './pages/PYQList';
@@ -55,6 +56,7 @@ const App: React.FC = () => {
           </Routes>
         </Layout>
       </AuthProvider>
+      <SpeedInsights />
     </Router>
   );
 };
