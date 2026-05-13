@@ -9,8 +9,7 @@ import ShareModal from '../components/ShareModal';
 import FlashcardDeck from '../components/FlashcardDeck';
 import { GoogleGenAI, Type } from '@google/genai';
 import { Flashcard, Note } from '../types';
-import { db } from '../utils/firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { supabase } from '../supabaseClient';
 
 const NoteView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,20 +19,31 @@ const NoteView: React.FC = () => {
   
   useEffect(() => {
     if (!id) return;
-    const unsubscribe = onSnapshot(doc(db, 'notes', id), (snapshot) => {
-        if (snapshot.exists()) {
-            const data = { id: snapshot.id, ...snapshot.data() } as Note;
-            setNote(data);
-            if (!activeSection && data.sections?.[0]) {
-                setActiveSection(data.sections[0].id);
-            }
+    
+    const fetchNote = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('notes')
+          .select('*')
+          .eq('id', id)
+          .single();
+          
+        if (error) throw error;
+        
+        if (data) {
+          setNote(data as Note);
+          if (!activeSection && data.sections?.[0]) {
+            setActiveSection(data.sections[0].id);
+          }
         }
-        setIsLoading(false);
-    }, (err) => {
+      } catch (err) {
         console.error("Error loading note:", err);
+      } finally {
         setIsLoading(false);
-    });
-    return () => unsubscribe();
+      }
+    };
+    
+    fetchNote();
   }, [id, activeSection]);
 
   const dept = note ? DEPARTMENTS.find(s => s.id === note.departmentId) : undefined;

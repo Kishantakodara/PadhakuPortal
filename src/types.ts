@@ -67,6 +67,7 @@ export type FilterState = {
   year: number | 'all';
   type: PaperType | 'all';
   search: string;
+  subject: string | 'all';
 };
 
 export interface Flashcard {

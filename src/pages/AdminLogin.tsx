@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../utils/firebase';
+import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 
@@ -17,19 +16,16 @@ const AdminLogin: React.FC = () => {
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) throw signInError;
       navigate('/admin/dashboard');
     } catch (err: any) {
       console.error(err);
-      if (err.message?.includes('app-check-token-is-invalid') || err.code === 'auth/internal-error') {
-        setError('App Check is blocking your login. Please go to the Firebase Console > App Check > APIs and "Unenforce" Authentication and Firestore for development.');
-      } else if (err.code === 'auth/operation-not-allowed') {
-        setError('Email/Password login is not enabled in Firebase Console. Please enable it in Authentication > Sign-in method.');
-      } else if (err.code === 'auth/invalid-credential') {
-        setError('Invalid email or password. Please try again.');
-      } else {
-        setError('Failed to log in. Please check your credentials or network connection.');
-      }
+      setError(err.message || 'Failed to log in. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -40,16 +36,14 @@ const AdminLogin: React.FC = () => {
     setError('');
 
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      navigate('/admin/dashboard');
+      const { error: signInError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (signInError) throw signInError;
+      // Note: Supabase OAuth redirects to the provider and back, so navigate isn't strictly needed here.
     } catch (err: any) {
       console.error(err);
-      if (err.message?.includes('app-check-token-is-invalid') || err.code === 'auth/internal-error') {
-        setError('App Check is blocking your login. Please go to the Firebase Console > App Check > APIs and "Unenforce" Authentication for development.');
-      } else if (err.code !== 'auth/popup-closed-by-user') {
-        setError('Failed to authenticate with Google.');
-      }
+      setError('Failed to authenticate with Google.');
     } finally {
       setIsLoading(false);
     }

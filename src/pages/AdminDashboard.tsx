@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Upload, FileText, Book, CheckCircle, AlertCircle, X, Trash2, Megaphone, Loader2 } from 'lucide-react';
 import { DEPARTMENTS, SEMESTERS, YEARS } from '../constants';
 import { PaperType } from '../types';
-import { db, storage, auth } from '../utils/firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { handleFirestoreError } from '../utils/errorHandlers';
-import { supabase } from '../supabaseClient';
+import { supabase, supabaseAdmin } from '../supabaseClient';
 
-type Tab = 'manage-pyqs' | 'manage-notes' | 'manage-announcements';
+import BulkUpload from './BulkUpload';
+
+type Tab = 'manage-pyqs' | 'manage-notes' | 'manage-announcements' | 'bulk-upload' | 'submissions';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('manage-pyqs');
@@ -22,6 +20,7 @@ const AdminDashboard: React.FC = () => {
   const [pyqs, setPyqs] = useState<any[]>([]);
   const [notes, setNotes] = useState<any[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [pendingSubmissions, setPendingSubmissions] = useState<any[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   // Form State
@@ -34,25 +33,47 @@ const AdminDashboard: React.FC = () => {
   const [announcementText, setAnnouncementText] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
-  useEffect(() => {
+  const fetchData = async () => {
     setIsLoadingData(true);
-    const collectionName = activeTab === 'manage-pyqs' ? 'pyqs' : activeTab === 'manage-notes' ? 'notes' : 'announcements';
     
-    // Real-time listener for current active tab data
-    const q = query(collection(db, collectionName), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      if (activeTab === 'manage-pyqs') setPyqs(data);
-      else if (activeTab === 'manage-notes') setNotes(data);
-      else if (activeTab === 'manage-announcements') setAnnouncements(data);
-      setIsLoadingData(false);
-    }, (err) => {
-      console.error(err);
-      handleFirestoreError(err, 'list', collectionName);
-      setIsLoadingData(false);
-    });
+    try {
+      if (activeTab === 'submissions') {
+        const { data: pyqSubs } = await supabase.from('pyqs').select('*').eq('status', 'pending');
+        const { data: noteSubs } = await supabase.from('notes').select('*').eq('status', 'pending');
+        
+        const allSubs = [
+          ...(pyqSubs || []).map(s => ({ ...s, type: 'pyq' })),
+          ...(noteSubs || []).map(s => ({ ...s, type: 'note' }))
+        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        
+        setPendingSubmissions(allSubs);
+      } else {
+        const collectionName = activeTab === 'manage-pyqs' ? 'pyqs' : activeTab === 'manage-notes' ? 'notes' : 'announcements';
+        
+        const query = supabase.from(collectionName).select('*');
+        
+        // Only show published items in the main management tabs (optional, or show all)
+        if (activeTab === 'manage-pyqs' || activeTab === 'manage-notes') {
+          query.neq('status', 'pending');
+        }
 
-    return () => unsubscribe();
+        const { data, error } = await query.order('createdAt', { ascending: false });
+
+        if (error) throw error;
+
+        if (activeTab === 'manage-pyqs') setPyqs(data || []);
+        else if (activeTab === 'manage-notes') setNotes(data || []);
+        else if (activeTab === 'manage-announcements') setAnnouncements(data || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [activeTab]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,15 +97,18 @@ const AdminDashboard: React.FC = () => {
     try {
       if (activeTab === 'manage-announcements') {
         console.log('Publishing announcement...');
-        await addDoc(collection(db, 'announcements'), {
+        const { error: insertError } = await supabase.from('announcements').insert({
           text: announcementText,
-          createdAt: serverTimestamp()
+          createdAt: new Date().toISOString()
         });
+        if (insertError) throw insertError;
         setAnnouncementText('');
         setSuccessMsg('Announcement posted successfully!');
       } else {
         console.log(`Uploading file for ${activeTab} to Supabase Storage...`);
-        const fileName = `uploads/${activeTab}/${Date.now()}_${file!.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+        const typeFolder = activeTab === 'manage-pyqs' ? 'pyqs' : 'notes';
+        // New structure: admin/[dept]/[type]/[filename]
+        const fileName = `admin/${department}/${typeFolder}/${Date.now()}_${file!.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('Document')
@@ -107,25 +131,28 @@ const AdminDashboard: React.FC = () => {
           semester,
           pdfUrl: downloadUrl,
           storagePath: storagePath,
-          createdAt: serverTimestamp(),
+          status: 'published',  // Admin uploads are published immediately — no approval needed
+          createdAt: new Date().toISOString(),
           views: 0,
           likes: 0
         };
 
-        console.log('Saving document to Firestore...');
+        console.log('Saving document to Supabase...');
         if (activeTab === 'manage-pyqs') {
-          await addDoc(collection(db, 'pyqs'), {
+          const { error: insertError } = await supabase.from('pyqs').insert({
             ...commonData,
             year,
             type: paperType
           });
+          if (insertError) throw insertError;
           setSuccessMsg('PYQ uploaded successfully!');
         } else if (activeTab === 'manage-notes') {
-          await addDoc(collection(db, 'notes'), {
+          const { error: insertError } = await supabase.from('notes').insert({
             ...commonData,
             author,
             topics: []
           });
+          if (insertError) throw insertError;
           setSuccessMsg('Note uploaded successfully!');
         }
 
@@ -139,37 +166,91 @@ const AdminDashboard: React.FC = () => {
       console.error("PUBLISH ERROR:", err);
       setErrorMsg(err.message || 'Failed to upload/save data');
       alert(`System Error: ${err.message || 'Failed to publish'}`);
-      handleFirestoreError(err, 'create', collectionName);
+      fetchData(); // Refresh data
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: string, storagePath?: string) => {
+  const handleDelete = async (id: string, storagePath?: string, pdfUrl?: string) => {
     const table = activeTab === 'manage-pyqs' ? 'pyqs' : activeTab === 'manage-notes' ? 'notes' : 'announcements';
-    console.log(`Deleting from ${table} with ID: ${id}`);
-
-    if (!confirm('Are you sure you want to delete this specific item? This action is irreversible.')) return;
+    console.log(`Deleting from ${table} with ID: ${id}, storagePath: ${storagePath}`);
 
     try {
-      await deleteDoc(doc(db, table, id));
-      console.log('Document deleted from Firestore.');
+      // 1. Delete database record first
+      const { error: deleteError, status } = await supabase.from(table).delete().eq('id', id);
+      if (deleteError) throw deleteError;
+      console.log(`DB delete status: ${status}`);
 
-      if (storagePath) {
-        await supabase.storage.from('Document').remove([storagePath]).catch(e => console.warn('Supabase delete fail:', e));
+      // 2. Resolve the storage path — use storagePath field, or extract from pdfUrl for old records
+      let resolvedPath = storagePath;
+      if (!resolvedPath && pdfUrl) {
+        // Extract path after "/Document/" from the public URL
+        const match = pdfUrl.match(/\/Document\/(.+)$/);
+        if (match) resolvedPath = match[1];
+        console.log(`Derived storagePath from pdfUrl: ${resolvedPath}`);
       }
 
-      setSuccessMsg(`Deleted from ${table} successfully.`);
+      // 3. Delete file from Supabase Storage using admin client (bypasses RLS)
+      if (resolvedPath) {
+        const { error: storageError } = await supabaseAdmin.storage.from('Document').remove([resolvedPath]);
+        if (storageError) {
+          console.error('Storage delete failed:', storageError.message);
+          alert(`⚠️ DB record deleted, but storage file was NOT removed.\nError: ${storageError.message}`);
+        } else {
+          console.log(`✅ Storage file deleted: ${resolvedPath}`);
+        }
+      } else {
+        console.warn('Could not resolve a storage path — storage file was NOT deleted.');
+      }
+
+      setSuccessMsg(`Deleted successfully.`);
       setTimeout(() => setSuccessMsg(''), 3000);
+      fetchData();
     } catch (err: any) {
-      console.error('CRITICAL DELETE ERROR:', err);
-      alert(`System Error: ${err.message || 'Unknown error during deletion'}`);
-      handleFirestoreError(err, 'delete', `${table}/${id}`);
+      console.error('DELETE ERROR:', err);
+      alert(`Delete Failed: ${err.message || 'Check your Supabase RLS delete policies'}`);
+      fetchData();
+    }
+  };
+
+  const handleApprove = async (id: string, type: 'pyq' | 'note') => {
+    const table = type === 'pyq' ? 'pyqs' : 'notes';
+    try {
+      const { error } = await supabase.from(table).update({ status: 'published' }).eq('id', id);
+      if (error) throw error;
+      setSuccessMsg('Submission approved and published!');
+      fetchData();
+    } catch (err: any) {
+      alert('Approval failed: ' + err.message);
+    }
+  };
+
+  const handleReject = async (id: string, type: 'pyq' | 'note', storagePath?: string) => {
+    const table = type === 'pyq' ? 'pyqs' : 'notes';
+    console.log(`Rejecting submission from ${table} with ID: ${id}`);
+    try {
+      const { error: deleteError } = await supabase.from(table).delete().eq('id', id);
+      if (deleteError) throw deleteError;
+      
+      if (storagePath) {
+        const { error: storageError } = await supabaseAdmin.storage.from('Document').remove([storagePath]);
+        if (storageError) {
+          console.error('Storage delete failed:', storageError.message);
+          alert(`⚠️ DB record deleted but storage file NOT removed.\nReason: ${storageError.message}`);
+        }
+      }
+      
+      setSuccessMsg('Submission rejected and removed.');
+      fetchData();
+    } catch (err: any) {
+      console.error('REJECT ERROR:', err);
+      alert('Rejection failed: ' + (err.message || 'Check Supabase RLS delete policies'));
     }
   };
 
   const handleLogout = async () => {
-    await signOut(auth);
+    await supabase.auth.signOut();
     navigate('/');
   };
 
@@ -219,9 +300,103 @@ const AdminDashboard: React.FC = () => {
             >
               <Megaphone className="h-4 w-4" /> Manage Announcements
             </button>
+            <button
+              onClick={() => setActiveTab('bulk-upload')}
+              className={`flex-1 py-4 min-w-[120px] text-sm font-medium text-center flex items-center justify-center gap-2 transition-colors ${
+                activeTab === 'bulk-upload' 
+                  ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-900 dark:text-purple-400 border-b-2 border-brand-orange' 
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-navy-800'
+              }`}
+            >
+              <Upload className="h-4 w-4" /> Bulk Upload
+            </button>
+            <button
+              onClick={() => setActiveTab('submissions')}
+              className={`flex-1 py-4 min-w-[120px] text-sm font-medium text-center flex items-center justify-center gap-2 transition-colors ${
+                activeTab === 'submissions' 
+                  ? 'bg-green-50 dark:bg-green-900/20 text-green-900 dark:text-green-400 border-b-2 border-brand-orange' 
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-navy-800'
+              }`}
+            >
+              <CheckCircle className="h-4 w-4" /> Submissions
+              {pendingSubmissions.length > 0 && (
+                <span className="ml-1 bg-brand-orange text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                  {pendingSubmissions.length}
+                </span>
+              )}
+            </button>
           </div>
 
-          <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {activeTab === 'bulk-upload' ? (
+            <div className="p-8">
+              <BulkUpload embedded={true} />
+            </div>
+          ) : activeTab === 'submissions' ? (
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-2xl font-bold text-navy-900 dark:text-white">Review Submissions</h3>
+                <span className="text-sm text-gray-500">{pendingSubmissions.length} pending reviews</span>
+              </div>
+              
+              {successMsg && (
+                  <div className="mb-6 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 p-4 rounded-lg flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5" /> {successMsg}
+                  </div>
+              )}
+
+              {pendingSubmissions.length === 0 ? (
+                <div className="text-center py-20 bg-gray-50 dark:bg-navy-950 rounded-2xl border-2 border-dashed border-gray-200 dark:border-navy-800">
+                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4 opacity-50" />
+                  <p className="text-gray-500 dark:text-gray-400">All caught up! No pending submissions.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {pendingSubmissions.map(sub => (
+                    <div key={sub.id} className="bg-white dark:bg-navy-900 rounded-2xl border border-gray-100 dark:border-navy-800 p-6 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
+                      <div className="flex justify-between items-start mb-4">
+                        <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${sub.type === 'pyq' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-brand-orange'}`}>
+                          {sub.type}
+                        </span>
+                        <span className="text-xs text-gray-400">{new Date(sub.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <h4 className="font-bold text-navy-900 dark:text-white mb-2 line-clamp-2">{sub.title}</h4>
+                      <p className="text-xs text-gray-500 mb-4">
+                        Dept: {sub.departmentId} • Sem: {sub.semester}
+                        {sub.author && ` • By: ${sub.author}`}
+                        {sub.year && ` • Year: ${sub.year}`}
+                      </p>
+                      
+                      <div className="mt-auto space-y-3">
+                        <a 
+                          href={sub.pdfUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-full inline-flex items-center justify-center gap-2 bg-gray-100 dark:bg-navy-800 text-navy-900 dark:text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-navy-700 transition-colors"
+                        >
+                          <FileText className="h-4 w-4" /> View PDF
+                        </a>
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => handleApprove(sub.id, sub.type)}
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm font-bold transition-colors"
+                          >
+                            Approve
+                          </button>
+                          <button 
+                            onClick={() => handleReject(sub.id, sub.type, sub.storagePath)}
+                            className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg text-sm font-bold transition-colors"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
             
             {/* Left Side: Adding Form */}
             <div>
@@ -337,7 +512,31 @@ const AdminDashboard: React.FC = () => {
 
                             <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload PDF</label>
-                            <input type="file" accept=".pdf" onChange={handleFileChange} className="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-navy-50 dark:file:bg-navy-800 file:text-navy-700 dark:file:text-gray-200 hover:file:bg-navy-100 dark:hover:file:bg-navy-700 cursor-pointer" required />
+                            <div className="flex flex-col gap-2">
+                                <input 
+                                    type="file" 
+                                    id="file-upload"
+                                    accept=".pdf" 
+                                    onChange={handleFileChange} 
+                                    className="hidden" 
+                                    required 
+                                />
+                                <label 
+                                    htmlFor="file-upload"
+                                    className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 dark:border-navy-700 rounded-xl p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-800 transition-colors"
+                                >
+                                    <Upload className="h-5 w-5 text-gray-400" />
+                                    <span className="text-sm text-gray-500">
+                                        {file ? file.name : 'Click to select PDF file'}
+                                    </span>
+                                </label>
+                                {file && (
+                                    <div className="flex items-center justify-between bg-brand-orange/10 p-2 rounded-lg text-xs text-brand-orange font-medium">
+                                        <span className="truncate">{file.name}</span>
+                                        <button type="button" onClick={() => setFile(null)}><X className="h-4 w-4" /></button>
+                                    </div>
+                                )}
+                            </div>
                             </div>
                         </>
                     )}
@@ -361,7 +560,13 @@ const AdminDashboard: React.FC = () => {
                       <div className="w-2 h-6 bg-brand-orange rounded-full" />
                       Manage Repository
                     </span>
-                    {isLoadingData && <Loader2 className="h-5 w-5 text-brand-orange animate-spin" />}
+                    <button 
+                        onClick={fetchData} 
+                        className="p-1.5 hover:bg-gray-200 dark:hover:bg-navy-800 rounded-full transition-colors"
+                        title="Refresh Data"
+                    >
+                        <Loader2 className={`h-5 w-5 text-brand-orange ${isLoadingData ? 'animate-spin' : ''}`} />
+                    </button>
                 </h3>
 
                 <div className="space-y-4">
@@ -372,7 +577,7 @@ const AdminDashboard: React.FC = () => {
                                 <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">{item.departmentId} • Sem {item.semester} • {item.year}</p>
                             </div>
                             <button 
-                                onClick={() => handleDelete(item.id, item.storagePath)} 
+                                onClick={() => handleDelete(item.id, item.storagePath, item.pdfUrl)} 
                                 className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 transition-all hover:scale-110 active:scale-95"
                                 title="Delete Record"
                             >
@@ -388,7 +593,7 @@ const AdminDashboard: React.FC = () => {
                                 <p className="text-xs text-gray-500 mt-1 font-medium italic">By {item.author} • {item.departmentId}</p>
                             </div>
                             <button 
-                                onClick={() => handleDelete(item.id, item.storagePath)} 
+                                onClick={() => handleDelete(item.id, item.storagePath, item.pdfUrl)} 
                                 className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg shrink-0 transition-all hover:scale-110 active:scale-95"
                                 title="Delete Record"
                             >
@@ -425,6 +630,7 @@ const AdminDashboard: React.FC = () => {
             </div>
 
           </div>
+          )}
         </div>
       </div>
     </div>

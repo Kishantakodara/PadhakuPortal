@@ -8,8 +8,7 @@ import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import PYQModal from '../components/PYQModal';
-import { db } from '../utils/firebase';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { supabase } from '../supabaseClient';
 
 const PYQList: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -17,20 +16,23 @@ const PYQList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'pyqs'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as any[];
-      setPyqs(data);
-      setIsLoading(false);
-    }, (err) => {
-      console.error("Error fetching pyqs:", err);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
+    const fetchPyqs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('pyqs')
+          .select('*')
+          .order('createdAt', { ascending: false });
+        
+        if (error) throw error;
+        setPyqs(data || []);
+      } catch (err) {
+        console.error("Error fetching pyqs:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchPyqs();
   }, []);
 
   const [filters, setFilters] = useState<FilterState>({
@@ -39,27 +41,77 @@ const PYQList: React.FC = () => {
     year: searchParams.get('year') && !isNaN(Number(searchParams.get('year'))) ? Number(searchParams.get('year')) : 'all',
     type: (searchParams.get('type') as PaperType) || 'all',
     search: searchParams.get('search') || '',
+    subject: 'all',
   });
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [shareItem, setShareItem] = useState<{ title: string, url?: string } | null>(null);
   const [selectedPYQ, setSelectedPYQ] = useState<PYQ | null>(null);
 
+  const subjects = useMemo(() => {
+    const uniqueSubjects = new Set<string>();
+    pyqs.forEach(pyq => {
+      // Derive department from storage path for cascading logic
+      let effectiveDept = pyq.departmentId;
+      if (pyq.storagePath && pyq.storagePath.includes('/')) {
+        const parts = pyq.storagePath.split('/');
+        const pathDept = parts.find(p => DEPARTMENTS.some(d => d.id === p));
+        if (pathDept) effectiveDept = pathDept;
+      }
+
+      const matchDept = filters.department === 'all' || effectiveDept === filters.department;
+      const matchSem = filters.semester === 'all' || pyq.semester === filters.semester;
+
+      if (matchDept && matchSem) {
+        // Standard format: Subject,Code,SeasonYear
+        if (pyq.title.includes(',')) {
+          uniqueSubjects.add(pyq.title.split(',')[0].trim());
+        } else {
+          // Fallback for old titles
+          const baseName = pyq.title.replace(/\s+PYQ\s+.+$/i, '').trim();
+          if (baseName) uniqueSubjects.add(baseName);
+        }
+      }
+    });
+    return Array.from(uniqueSubjects).sort();
+  }, [pyqs, filters.department, filters.semester]);
+
   const filteredPYQs = useMemo(() => {
     return pyqs.filter((pyq) => {
       const isPublished = (pyq as any).status !== 'pending';
-      const matchDept = filters.department === 'all' || pyq.departmentId === filters.department;
-      // ...
+      
+      // Derive department from storage path if possible: "admin/it/pyqs/..." -> "it"
+      let effectiveDept = pyq.departmentId;
+      if (pyq.storagePath && pyq.storagePath.includes('/')) {
+        const parts = pyq.storagePath.split('/');
+        // New structure: admin/[dept]/pyqs/ or bulk/[dept]/pyqs/ or submissions/[dept]/pyqs/
+        // We look for any part that matches a valid department ID
+        const pathDept = parts.find(p => DEPARTMENTS.some(d => d.id === p));
+        if (pathDept) effectiveDept = pathDept;
+      }
+
+      const matchDept = filters.department === 'all' || effectiveDept === filters.department;
       const matchSem = filters.semester === 'all' || pyq.semester === filters.semester;
       const matchYear = filters.year === 'all' || pyq.year === filters.year;
       const matchType = filters.type === 'all' || pyq.type === filters.type;
       const matchSearch = pyq.title.toLowerCase().includes(filters.search.toLowerCase());
-      return isPublished && matchDept && matchSem && matchYear && matchType && matchSearch;
+      
+      const subjectName = pyq.title.includes(',') ? pyq.title.split(',')[0].trim() : pyq.title.replace(/\s+PYQ\s+.+$/i, '').trim();
+      const matchSubject = filters.subject === 'all' || subjectName === filters.subject;
+
+      return isPublished && matchDept && matchSem && matchYear && matchType && matchSearch && matchSubject;
     });
   }, [filters, pyqs]);
 
   const handleFilterChange = (key: keyof FilterState, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => {
+      const newFilters = { ...prev, [key]: value };
+      // Reset subject if department or semester changes
+      if (key === 'department' || key === 'semester') {
+        newFilters.subject = 'all';
+      }
+      return newFilters;
+    });
   };
 
   const FilterSidebar = () => (
@@ -71,7 +123,7 @@ const PYQList: React.FC = () => {
             Filters
           </h3>
           <button 
-            onClick={() => setFilters({ department: 'all', semester: 'all', year: 'all', type: 'all', search: '' })}
+            onClick={() => setFilters({ department: 'all', semester: 'all', year: 'all', type: 'all', search: '', subject: 'all' })}
             className="text-xs font-medium text-brand-orange hover:text-brand-hover transition-colors"
           >
             Clear All
@@ -113,6 +165,24 @@ const PYQList: React.FC = () => {
                 {sem}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Subject Filter */}
+        <div className="mb-6">
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Subject</label>
+          <div className="relative">
+            <select
+              value={filters.subject}
+              onChange={(e) => handleFilterChange('subject', e.target.value)}
+              className="w-full bg-gray-50 dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-xl p-3 text-sm text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-brand-orange/20 focus:border-brand-orange outline-none appearance-none cursor-pointer font-medium"
+            >
+              <option value="all">All Subjects</option>
+              {subjects.map(subject => (
+                <option key={subject} value={subject}>{subject}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
 

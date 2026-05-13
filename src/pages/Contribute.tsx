@@ -3,6 +3,7 @@ import { Upload, FileText, Book, CheckCircle, AlertCircle, ChevronRight } from '
 import { Link } from 'react-router-dom';
 import { DEPARTMENTS, SEMESTERS, YEARS } from '../constants';
 import { PaperType } from '../types';
+import { supabase } from '../supabaseClient';
 
 type UploadType = 'pyq' | 'note';
 
@@ -28,13 +29,60 @@ const Contribute: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!file) return;
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // 1. Upload to Supabase Storage
+      // Path structure: submissions/pyqs/ or submissions/notes/
+      const typeFolder = activeTab === 'pyq' ? 'pyqs' : 'notes';
+      const storagePath = `submissions/${department}/${typeFolder}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
+      const { error: uploadError } = await supabase.storage
+        .from('Document')
+        .upload(storagePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // 2. Get Public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('Document')
+        .getPublicUrl(storagePath);
+
+      // 3. Insert into Database with 'pending' status
+      const commonData = {
+        title,
+        departmentId: department,
+        semester,
+        pdfUrl: publicUrl,
+        storagePath: storagePath,
+        status: 'pending' as const,
+        createdAt: new Date().toISOString(),
+        views: 0,
+        likes: 0
+      };
+
+      if (activeTab === 'pyq') {
+        const { error: dbError } = await supabase.from('pyqs').insert({
+          ...commonData,
+          year,
+          type: paperType
+        });
+        if (dbError) throw dbError;
+      } else {
+        const { error: dbError } = await supabase.from('notes').insert({
+          ...commonData,
+          author,
+        });
+        if (dbError) throw dbError;
+      }
+
       setStep(3); // Success state
-    }, 1500);
+    } catch (error: any) {
+      console.error('Submission Error:', error);
+      alert('Failed to submit: ' + (error.message || 'Unknown error'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStep1 = () => (

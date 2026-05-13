@@ -5,14 +5,14 @@ import { Filter, Search, BookOpen, User, Eye, Clock, ChevronDown, SlidersHorizon
 import { DEPARTMENTS, SEMESTERS } from '../constants';
 import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
-import { db } from '../utils/firebase';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { supabase } from '../supabaseClient';
 import { Note } from '../types';
 
 interface NoteFilterState {
   department: string | 'all';
   semester: number | 'all';
   search: string;
+  subject: string | 'all';
 }
 
 const NotesList: React.FC = () => {
@@ -20,42 +20,91 @@ const NotesList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'notes'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as any[];
-      setNotes(data);
-      setIsLoading(false);
-    }, (err) => {
-      console.error("Error fetching notes:", err);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
+    const fetchNotes = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('notes')
+          .select('*')
+          .order('createdAt', { ascending: false });
+        
+        if (error) throw error;
+        setNotes(data || []);
+      } catch (err) {
+        console.error("Error fetching notes:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchNotes();
   }, []);
 
   const [filters, setFilters] = useState<NoteFilterState>({
     department: 'all',
     semester: 'all',
     search: '',
+    subject: 'all',
   });
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
+  const subjects = useMemo(() => {
+    const uniqueSubjects = new Set<string>();
+    notes.forEach(note => {
+      // Derive department from storage path for cascading logic
+      let effectiveDept = note.departmentId;
+      if (note.storagePath && note.storagePath.includes('/')) {
+        const parts = note.storagePath.split('/');
+        const pathDept = parts.find(p => DEPARTMENTS.some(d => d.id === p));
+        if (pathDept) effectiveDept = pathDept;
+      }
+
+      const matchDept = filters.department === 'all' || effectiveDept === filters.department;
+      const matchSem = filters.semester === 'all' || note.semester === filters.semester;
+
+      if (matchDept && matchSem) {
+        if (note.title.includes(',')) {
+          uniqueSubjects.add(note.title.split(',')[0].trim());
+        } else {
+          uniqueSubjects.add(note.title.split(' - ')[0].trim());
+        }
+      }
+    });
+    return Array.from(uniqueSubjects).sort();
+  }, [notes, filters.department, filters.semester]);
+
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
       const isPublished = (note as any).status !== 'pending';
-      const matchDept = filters.department === 'all' || note.departmentId === filters.department;
+      
+      // Derive department from storage path if possible
+      let effectiveDept = note.departmentId;
+      if (note.storagePath && note.storagePath.includes('/')) {
+        const parts = note.storagePath.split('/');
+        const pathDept = parts.find(p => DEPARTMENTS.some(d => d.id === p));
+        if (pathDept) effectiveDept = pathDept;
+      }
+
+      const matchDept = filters.department === 'all' || effectiveDept === filters.department;
       const matchSem = filters.semester === 'all' || note.semester === filters.semester;
       const matchSearch = note.title.toLowerCase().includes(filters.search.toLowerCase());
-      return isPublished && matchDept && matchSem && matchSearch;
+      
+      const subjectName = note.title.includes(',') ? note.title.split(',')[0].trim() : note.title.split(' - ')[0].trim();
+      const matchSubject = filters.subject === 'all' || subjectName === filters.subject;
+
+      return isPublished && matchDept && matchSem && matchSearch && matchSubject;
     });
   }, [filters, notes]);
 
   const handleFilterChange = (key: keyof NoteFilterState, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => {
+      const newFilters = { ...prev, [key]: value };
+      // Reset subject if department or semester changes
+      if (key === 'department' || key === 'semester') {
+        newFilters.subject = 'all';
+      }
+      return newFilters;
+    });
   };
 
   const FilterSidebar = () => (
@@ -66,7 +115,7 @@ const NotesList: React.FC = () => {
             <Filter className="h-5 w-5 text-brand-orange" /> Filters
           </h3>
           <button 
-            onClick={() => setFilters({ department: 'all', semester: 'all', search: '' })}
+            onClick={() => setFilters({ department: 'all', semester: 'all', search: '', subject: 'all' })}
             className="text-xs text-brand-orange hover:underline"
           >
             Reset All
@@ -108,6 +157,24 @@ const NotesList: React.FC = () => {
                 Sem {sem}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Subject Filter */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+          <div className="relative">
+            <select
+              value={filters.subject}
+              onChange={(e) => handleFilterChange('subject', e.target.value)}
+              className="w-full bg-gray-50 dark:bg-navy-800 border border-gray-200 dark:border-navy-700 rounded-lg p-2.5 text-sm text-gray-700 dark:text-gray-200 focus:ring-1 focus:ring-brand-orange focus:border-brand-orange outline-none appearance-none cursor-pointer"
+            >
+              <option value="all">All Subjects</option>
+              {subjects.map(subject => (
+                <option key={subject} value={subject}>{subject}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
       </div>
