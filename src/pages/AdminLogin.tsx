@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, AlertCircle } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ShieldAlert } from 'lucide-react';
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -53,12 +53,20 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 dark:bg-navy-950 px-4">
       <div className="max-w-md w-full bg-white dark:bg-navy-900 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-navy-800">
         <div className="p-8">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <div className="w-20 h-20 bg-brand-orange/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Lock className="w-10 h-10 text-brand-orange" />
             </div>
             <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-3">Admin Portal</h2>
             <p className="text-gray-500 dark:text-gray-400 text-sm">Sign in to manage PadhakuPortal.</p>
+          </div>
+
+          {/* Admin-only notice */}
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-xl p-4 flex items-start gap-3 mb-8">
+            <ShieldAlert className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-700 dark:text-amber-400">
+              <span className="font-semibold">Admin access only.</span> This login page is exclusively for site administrators. If you are a student, you do not need to log in to use PadhakuPortal.
+            </p>
           </div>
 
           {error && (
@@ -132,6 +140,9 @@ const AdminLogin: React.FC = () => {
             </svg>
             Sign in with Google
           </button>
+          <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+            Google login is restricted to authorised admins only.
+          </p>
         </div>
       </div>
     </div>
