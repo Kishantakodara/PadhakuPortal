@@ -243,7 +243,7 @@ const Contribute: React.FC = () => {
         >
           Upload Another
         </button>
-        <Link to="/" className="px-6 py-2 border border-gray-300 dark:border-navy-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">
+        <Link to="/home" className="px-6 py-2 border border-gray-300 dark:border-navy-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">
           Go Home
         </Link>
       </div>

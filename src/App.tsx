@@ -20,6 +20,7 @@ import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
 import BulkUpload from './pages/BulkUpload';
+import Welcome from './pages/Welcome';
 
 const App: React.FC = () => {
   return (
@@ -28,7 +29,8 @@ const App: React.FC = () => {
       <AuthProvider>
         <Layout>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Welcome />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/pyqs" element={<PYQList />} />
             <Route path="/notes" element={<NotesList />} />
             <Route path="/notes/:id" element={<NoteView />} />
@@ -53,7 +55,7 @@ const App: React.FC = () => {
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             
             {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </Layout>
       </AuthProvider>

@@ -1,17 +1,19 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2, ShoppingBag, Tag, Calculator, Cpu } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import * as Icons from 'lucide-react';
 import AdPlaceholder from '../components/AdPlaceholder';
 import { supabase } from '../supabaseClient';
+import anime from 'animejs';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(true);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -32,7 +34,56 @@ const Home: React.FC = () => {
     };
 
     fetchAnnouncements();
+
+    // Initial state: hide elements before animating
+    anime.set(['#hero-title span', '.welcome-desc', '.quick-card'], {
+      opacity: 0,
+      translateY: 20
+    });
+
+    // Initial Hero Animation
+    anime.timeline({
+      easing: 'easeOutExpo',
+      duration: 1000
+    })
+    .add({
+      targets: '#hero-title span',
+      translateY: [40, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(100)
+    })
+    .add({
+      targets: '.welcome-desc',
+      translateY: [20, 0],
+      opacity: [0, 1],
+      duration: 800,
+    }, '-=800')
+    .add({
+      targets: '.quick-card',
+      translateY: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(150),
+      easing: 'easeOutElastic(1, .8)'
+    }, '-=600');
+
   }, []);
+
+  // Animate announcements when they load
+  useEffect(() => {
+    if (!loadingAnnouncements && announcements.length > 0) {
+      // Set initial state for announcements
+      anime.set('.announcement-item', { opacity: 0, translateX: -20 });
+
+      anime({
+        targets: '.announcement-item',
+        translateX: [0],
+        opacity: [1],
+        delay: anime.stagger(100),
+        easing: 'easeOutQuad',
+        duration: 800
+      });
+    }
+  }, [loadingAnnouncements, announcements]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,8 +121,8 @@ const Home: React.FC = () => {
             <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Semester 4 exams approaching!</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight animate-fade-in-up-delay-1 opacity-0">
-            <Link to="/" className="group inline-flex flex-col items-center">
+          <h1 id="hero-title" className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight">
+            <Link to="/home" className="group inline-flex flex-col items-center">
               <span className="text-sm font-bold text-brand-orange mb-2 tracking-[0.3em] uppercase opacity-80 group-hover:opacity-100 transition-opacity">PadhakuPortal</span>
               <span>The Smarter Way</span>
             </Link>
@@ -79,12 +130,12 @@ const Home: React.FC = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-500">to Study.</span>
           </h1>
 
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up-delay-2 opacity-0">
+          <p className="welcome-desc text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
             Everything you need to ace your college exams in one place.
             <span className="font-semibold text-navy-900 dark:text-white"> PYQs, Notes, and AI Help.</span>
           </p>
 
-          <div className="animate-fade-in-up-delay-2 opacity-0">
+          <div className="welcome-desc">
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group z-20">
               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400 group-focus-within:text-brand-orange transition-colors" />
@@ -97,7 +148,7 @@ const Home: React.FC = () => {
                 className="block w-full pl-12 pr-32 py-5 rounded-2xl border-2 border-transparent bg-white dark:bg-navy-800/80 text-gray-900 placeholder-gray-400 shadow-[0_8px_30px_rgb(0,0,0,0.04)] focus:border-brand-orange/30 focus:ring-4 focus:ring-brand-orange/10 transition-all dark:text-white dark:placeholder-gray-500 backdrop-blur-xl"
               />
               <div className="absolute inset-y-2 right-2">
-                <button type="submit" className="h-full bg-navy-900 text-white px-6 rounded-xl font-medium hover:bg-navy-800 transition-all hover:scale-105 shadow-lg shadow-navy-900/20 flex items-center gap-2 dark:bg-brand-orange dark:hover:bg-brand-hover animate-pulse-slow">
+                <button type="submit" className="h-full bg-navy-900 text-white px-6 rounded-xl font-medium hover:bg-navy-800 transition-all hover:scale-105 shadow-lg shadow-navy-900/20 flex items-center gap-2 dark:bg-brand-orange dark:hover:bg-brand-hover">
                   Ask AI
                 </button>
               </div>
@@ -110,7 +161,7 @@ const Home: React.FC = () => {
                   <button
                     key={tag}
                     onClick={() => navigate(`/ai-tutor?q=${encodeURIComponent('Explain ' + tag)}`)}
-                    className="bg-white dark:bg-navy-800 px-3 py-1 rounded-full border border-gray-200 dark:border-navy-700 hover:border-brand-orange dark:hover:border-brand-orange transition-colors text-xs"
+                    className="bg-white dark:bg-navy-900 px-3 py-1 rounded-full border border-gray-200 dark:border-navy-700 hover:border-brand-orange dark:hover:border-brand-orange transition-colors text-xs"
                   >
                     {tag}
                   </button>
@@ -124,7 +175,7 @@ const Home: React.FC = () => {
       {/* Quick Access - Colorful Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 mb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link to="/pyqs" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up opacity-0">
+          <Link to="/pyqs" className="quick-card relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 dark:bg-blue-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
             <div className="relative z-10">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:rotate-6 transition-transform">
@@ -138,7 +189,7 @@ const Home: React.FC = () => {
             </div>
           </Link>
 
-          <Link to="/notes" className="relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up-delay-1 opacity-0">
+          <Link to="/notes" className="quick-card relative overflow-hidden bg-white dark:bg-navy-900 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800">
             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 dark:bg-orange-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
             <div className="relative z-10">
               <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-2xl flex items-center justify-center text-brand-orange mb-6 group-hover:rotate-6 transition-transform">
@@ -152,15 +203,11 @@ const Home: React.FC = () => {
             </div>
           </Link>
 
-          {/* Featured Card - Adaptive Style (Light/Dark) */}
           <Link
             to="/exam-tips"
-            id="featured-card-tips"
-            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up-delay-2 opacity-0"
+            className="quick-card relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800"
           >
-            <div
-              className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-yellow-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"
-            />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-yellow-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110" />
             <div className="relative z-10 text-left">
               <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/50 rounded-2xl flex items-center justify-center text-yellow-600 dark:text-yellow-400 mb-6 group-hover:rotate-6 transition-transform">
                 <Sparkles className="h-6 w-6" />
@@ -196,12 +243,23 @@ const Home: React.FC = () => {
                   <p className="text-sm">Loading announcements...</p>
                 </div>
               ) : announcements.length > 0 ? (
-                announcements.map((item) => (
-                  <div key={item.id} className="group flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-navy-800/50 border border-transparent hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800 transition-all cursor-pointer">
+                announcements.map((item, index) => (
+                  <div 
+                    key={item.id} 
+                    onClick={() => index === 0 && navigate('/')}
+                    className={`announcement-item group flex items-center justify-between p-4 rounded-2xl border border-transparent transition-all cursor-pointer opacity-0 ${
+                      index === 0 
+                      ? 'bg-gradient-to-r from-orange-50 to-white dark:from-navy-800/80 dark:to-navy-900 border-brand-orange/20 shadow-sm hover:shadow-md' 
+                      : 'bg-gray-50 dark:bg-navy-800/50 hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800'
+                    }`}
+                  >
                     <div className="flex items-start gap-4">
-                      <div className="mt-1.5 w-2 h-2 rounded-full flex-shrink-0 bg-brand-orange" />
+                      <div className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${index === 0 ? 'bg-brand-orange animate-pulse' : 'bg-brand-orange'}`} />
                       <div>
-                        <h3 className="font-semibold text-navy-900 dark:text-gray-100 group-hover:text-brand-orange transition-colors text-sm md:text-base">{item.text}</h3>
+                        <h3 className={`font-semibold transition-colors text-sm md:text-base ${index === 0 ? 'text-navy-900 dark:text-white group-hover:text-brand-orange' : 'text-navy-900 dark:text-gray-100 group-hover:text-brand-orange'}`}>
+                          {item.text}
+                          {index === 0 && <span className="ml-2 text-[10px] text-brand-orange font-black uppercase tracking-tighter">Featured</span>}
+                        </h3>
                         <div className="flex items-center gap-3 mt-1">
                           <span className="text-xs text-gray-400 flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
@@ -209,14 +267,15 @@ const Home: React.FC = () => {
                               ? new Date(item.createdAt).toLocaleDateString()
                               : 'Just now'}
                           </span>
-                          <span className="relative overflow-hidden text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-navy-700 dark:text-blue-400 group-hover:shadow-sm">
-                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[100%] group-hover:animate-shimmer" />
-                            <span className="relative">New</span>
-                          </span>
+                          {index === 0 && (
+                             <span className="text-[10px] text-gray-500 font-bold flex items-center gap-1 group-hover:text-brand-orange">
+                               <Sparkles className="h-2.5 w-2.5" /> Click to see what's new
+                             </span>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-brand-orange transition-colors hidden sm:block" />
+                    <ArrowRight className={`h-4 w-4 transition-colors hidden sm:block ${index === 0 ? 'text-brand-orange translate-x-1' : 'text-gray-300 group-hover:text-brand-orange'}`} />
                   </div>
                 ))
               ) : (
