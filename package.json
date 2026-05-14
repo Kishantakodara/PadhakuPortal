@@ -13,6 +13,7 @@
     "@google/genai": "latest",
     "@supabase/supabase-js": "^2.105.4",
     "@types/animejs": "^3.1.13",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "animejs": "^3.2.2",
     "lucide-react": "^0.554.0",
