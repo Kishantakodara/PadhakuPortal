@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Eye, Share2, FileText, Calendar, Database, Download, ExternalLink, Smartphone } from 'lucide-react';
+import { X, Eye, Share2, FileText, Calendar, Database, Download } from 'lucide-react';
 import { PYQ } from '../types';
 
-// Detect mobile/tablet devices
-const isMobileDevice = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+// On mobile, use Google Docs Viewer so PDF renders inside the iframe
+const getPdfSrc = (url: string) => {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  return isMobile
+    ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`
+    : `${url}#toolbar=0`;
+};
 import { DEPARTMENTS } from '../constants';
 
 interface PYQModalProps {
@@ -72,45 +77,14 @@ const PYQModal: React.FC<PYQModalProps> = ({ isOpen, onClose, pyq, onShare }) =>
             </div>
             <div className="flex-1 w-full overflow-hidden">
               {documentUrl ? (
-                isMobileDevice() ? (
-                  // Mobile: iframes don't work for PDFs on iOS/Android
-                  <div className="flex flex-col items-center justify-center h-full bg-gray-50 dark:bg-navy-950 p-6 text-center gap-6">
-                    <div className="w-20 h-20 rounded-3xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                      <Smartphone className="h-10 w-10 text-brand-orange" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-navy-900 dark:text-white mb-2">Open Document</h4>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
-                        For the best experience on mobile, open the document in your browser's PDF viewer.
-                      </p>
-                    </div>
-                    <div className="flex flex-col w-full max-w-xs gap-3">
-                      <a
-                        href={documentUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-brand-orange hover:bg-brand-hover text-white px-6 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-orange-500/20"
-                      >
-                        <ExternalLink className="h-5 w-5" /> Open PDF
-                      </a>
-                      <a
-                        href={documentUrl}
-                        download
-                        className="flex items-center justify-center gap-2 border border-gray-200 dark:border-navy-700 text-navy-900 dark:text-white px-6 py-3.5 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-navy-800 transition-all"
-                      >
-                        <Download className="h-5 w-5" /> Download PDF
-                      </a>
-                    </div>
-                  </div>
-                ) : (
-                  <iframe 
-                    src={`${documentUrl}#toolbar=0`} 
-                    className="w-full h-full border-0" 
-                    title={pyq.title}
-                  />
-                )
+                <iframe
+                  src={getPdfSrc(documentUrl)}
+                  className="w-full h-full border-0"
+                  title={pyq.title}
+                  allow="autoplay"
+                />
               ) : (
-                 <div className="flex items-center justify-center h-full text-gray-500">Document is not available for preview.</div>
+                <div className="flex items-center justify-center h-full text-gray-500">Document is not available for preview.</div>
               )}
             </div>
           </div>
