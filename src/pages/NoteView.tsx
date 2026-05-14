@@ -15,7 +15,7 @@ import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import FlashcardDeck from '../components/FlashcardDeck';
-import { GoogleGenAI, Type } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { Flashcard, Note } from '../types';
 import { supabase } from '../supabaseClient';
 
@@ -105,33 +105,56 @@ const NoteView: React.FC = () => {
     
     // Combine note content for context
     const fullText = note.sections ? note.sections.map(s => s.title + ": " + s.content).join("\n\n") : "Please provide a summary of this document based on the title: " + note.title;
-    
+    const prompt = `Create 5 study flashcards based on the following text. The output must be a JSON array of objects, where each object has a "question" and an "answer" property. Return ONLY the raw JSON array. Text: ${fullText.substring(0, 5000)}`;
+
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+        const nvidiaKey = import.meta.env.VITE_NVIDIA_NIM_API_KEY;
+        const geminiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
         
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: `Create 5 study flashcards based on the following text. The output must be a JSON array of objects, where each object has a "question" and an "answer" property. Text: ${fullText.substring(0, 5000)}`,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: Type.ARRAY,
-                    items: {
-                        type: Type.OBJECT,
-                        properties: {
-                            question: { type: Type.STRING },
-                            answer: { type: Type.STRING }
-                        },
-                        required: ["question", "answer"]
-                    }
-                }
+        let jsonText = "";
+
+        if (nvidiaKey) {
+            // Use NVIDIA NIM (Llama 3.1 70B) - very fast for JSON
+            const response = await fetch("/api/nvidia/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${nvidiaKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "meta/llama-3.1-70b-instruct",
+                    messages: [
+                        { role: "system", content: "You are a helpful assistant that outputs only valid JSON arrays." },
+                        { role: "user", content: prompt }
+                    ],
+                    temperature: 0.1,
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                jsonText = data.choices[0].message.content;
             }
-        });
+        }
+
+        // Fallback to Gemini if NVIDIA fails or is missing
+        if (!jsonText && geminiKey) {
+            const genAI = new GoogleGenAI(geminiKey);
+            const model = genAI.getGenerativeModel({
+                model: 'gemini-1.5-flash',
+                generationConfig: { responseMimeType: "application/json" }
+            });
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            jsonText = response.text();
+        }
         
-        const jsonText = response.text;
         if (jsonText) {
-            const parsedCards = JSON.parse(jsonText);
-            const cardsWithIds = parsedCards.map((c: any, i: number) => ({ ...c, id: `fc-${i}` }));
+            // Llama might wrap in code blocks, clean it up
+            const cleanedJson = jsonText.replace(/```json\n?|\n?```/g, '').trim();
+            const parsedCards = JSON.parse(cleanedJson);
+            const cardsWithIds = (Array.isArray(parsedCards) ? parsedCards : (parsedCards.flashcards || [])).map((c: any, i: number) => ({ ...c, id: `fc-${i}` }));
             setFlashcards(cardsWithIds);
             setShowFlashcards(true);
         }
