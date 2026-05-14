@@ -225,8 +225,8 @@ const Whiteboard: React.FC = () => {
                     <button onClick={clearCanvas} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Clear All">
                         <Trash2 className="h-5 w-5" />
                     </button>
-                    <button onClick={downloadCanvas} className="p-2 bg-brand-orange text-white rounded-lg hover:bg-brand-hover transition-colors shadow-sm flex items-center gap-2 text-sm font-medium">
-                        <Download className="h-4 w-4" /> <span className="hidden sm:inline">Save</span>
+                    <button onClick={downloadCanvas} className="px-2.5 py-1.5 bg-brand-orange text-white rounded-md hover:bg-brand-hover transition-colors shadow-sm flex items-center gap-1.5 text-xs font-bold">
+                        <Download className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Save</span>
                     </button>
                 </div>
             </div>
