@@ -319,7 +319,7 @@ const NoteView: React.FC = () => {
                                   <div className="flex items-center gap-2 shrink-0">
                                     {note.pdfUrl && (
                                       <a href={note.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-500 hover:text-brand-orange hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-navy-800 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2" title="Download PDF">
-                                        <Download className="h-4 w-4" /> <span className="hidden sm:inline">Download</span>
+                                        <Download className="h-2 w-2" /> <span className="hidden sm:inline">Download</span>
                                       </a>
                                     )}
                                     <button 
