@@ -15,6 +15,7 @@ import Contact from './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Disclaimer from './pages/Disclaimer';
+import ExamTips from './pages/ExamTips';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/exam-tips" element={<ExamTips />} />
             
             <Route path="/bulk-upload" element={<BulkUpload />} />
             <Route path="/admin/login" element={<AdminLogin />} />

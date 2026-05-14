@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText, Eye, X, Download } from 'lucide-react';
+import { Calendar, User, Clock, Share2, Bookmark, ThumbsUp, ChevronRight, Hash, BookOpen, AlertCircle, ArrowLeft, BrainCircuit, Loader2, Sparkles, PenTool, FileText, Eye, X, Download, ExternalLink, Smartphone } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
+
+// Detect mobile/tablet devices
+const isMobileDevice = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
 import AdSidePanel from '../components/AdSidePanel';
@@ -294,11 +297,43 @@ const NoteView: React.FC = () => {
                                   </div>
                                 </div>
                                 <div className="flex-1 w-full overflow-hidden">
-                                  <iframe 
-                                    src={`${note.pdfUrl}#toolbar=0`} 
-                                    className="w-full h-full border-0" 
-                                    title={note.title}
-                                  />
+                                  {isMobileDevice() ? (
+                                    // Mobile: iframes don't render PDFs on iOS/Android
+                                    <div className="flex flex-col items-center justify-center h-full bg-gray-50 dark:bg-navy-950 p-6 text-center gap-6">
+                                      <div className="w-20 h-20 rounded-3xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                        <Smartphone className="h-10 w-10 text-brand-orange" />
+                                      </div>
+                                      <div>
+                                        <h4 className="text-lg font-bold text-navy-900 dark:text-white mb-2">Open Document</h4>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
+                                          For the best reading experience on mobile, open this PDF directly in your browser.
+                                        </p>
+                                      </div>
+                                      <div className="flex flex-col w-full max-w-xs gap-3">
+                                        <a
+                                          href={note.pdfUrl}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="flex items-center justify-center gap-2 bg-brand-orange hover:bg-brand-hover text-white px-6 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-orange-500/20"
+                                        >
+                                          <ExternalLink className="h-5 w-5" /> Open PDF
+                                        </a>
+                                        <a
+                                          href={note.pdfUrl}
+                                          download
+                                          className="flex items-center justify-center gap-2 border border-gray-200 dark:border-navy-700 text-navy-900 dark:text-white px-6 py-3.5 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-navy-800 transition-all"
+                                        >
+                                          <Download className="h-5 w-5" /> Download PDF
+                                        </a>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <iframe 
+                                      src={`${note.pdfUrl}#toolbar=0`} 
+                                      className="w-full h-full border-0" 
+                                      title={note.title}
+                                    />
+                                  )}
                                 </div>
                               </div>
                             </div>

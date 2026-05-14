@@ -11,7 +11,7 @@ const Contribute: React.FC = () => {
   const [step, setStep] = useState(1);
   const [activeTab, setActiveTab] = useState<UploadType>('pyq');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Form State
   const [title, setTitle] = useState('');
   const [department, setDepartment] = useState(DEPARTMENTS[0].id);
@@ -31,7 +31,7 @@ const Contribute: React.FC = () => {
     e.preventDefault();
     if (!file) return;
     setIsSubmitting(true);
-    
+
     try {
       // 1. Upload to Supabase Storage
       // Path structure: submissions/pyqs/ or submissions/notes/
@@ -208,8 +208,8 @@ const Contribute: React.FC = () => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload PDF</label>
-        <input 
-          type="file" 
+        <input
+          type="file"
           accept=".pdf"
           onChange={handleFileChange}
           className="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-navy-50 dark:file:bg-navy-800 file:text-navy-700 dark:file:text-gray-200 hover:file:bg-navy-100 dark:hover:file:bg-navy-700 cursor-pointer"
@@ -237,14 +237,14 @@ const Contribute: React.FC = () => {
         Thank you for contributing. Your {activeTab === 'pyq' ? 'paper' : 'note'} has been sent to the admins for approval. It will be live once verified.
       </p>
       <div className="flex justify-center gap-4">
-        <button 
-            onClick={() => { setStep(1); setTitle(''); setFile(null); }}
-            className="bg-navy-900 dark:bg-brand-orange text-white px-6 py-2 rounded-lg hover:bg-navy-800 dark:hover:bg-brand-hover transition-colors"
+        <button
+          onClick={() => { setStep(1); setTitle(''); setFile(null); }}
+          className="bg-navy-900 dark:bg-brand-orange text-white px-6 py-2 rounded-lg hover:bg-navy-800 dark:hover:bg-brand-hover transition-colors"
         >
-            Upload Another
+          Upload Another
         </button>
         <Link to="/" className="px-6 py-2 border border-gray-300 dark:border-navy-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">
-            Go Home
+          Go Home
         </Link>
       </div>
     </div>
@@ -253,19 +253,19 @@ const Contribute: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-navy-950 py-12 transition-colors">
       <div className="max-w-2xl mx-auto px-4">
-        
+
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-navy-900 dark:text-white">Contribute to UniStack</h1>
+          <h1 className="text-3xl font-bold text-navy-900 dark:text-white">Contribute to Padhaku Portal</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">Help your juniors by sharing study resources.</p>
         </div>
 
         {/* Progress Indicator */}
         <div className="flex items-center justify-center mb-10 space-x-4">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 1 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>1</div>
-            <div className={`h-1 w-10 ${step >= 2 ? 'bg-brand-orange' : 'bg-gray-200 dark:bg-navy-800'}`}></div>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 2 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>2</div>
-            <div className={`h-1 w-10 ${step >= 3 ? 'bg-brand-orange' : 'bg-gray-200 dark:bg-navy-800'}`}></div>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 3 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>3</div>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 1 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>1</div>
+          <div className={`h-1 w-10 ${step >= 2 ? 'bg-brand-orange' : 'bg-gray-200 dark:bg-navy-800'}`}></div>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 2 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>2</div>
+          <div className={`h-1 w-10 ${step >= 3 ? 'bg-brand-orange' : 'bg-gray-200 dark:bg-navy-800'}`}></div>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 3 ? 'bg-brand-orange text-white' : 'bg-gray-200 dark:bg-navy-800 text-gray-500 dark:text-gray-400'}`}>3</div>
         </div>
 
         <div className="bg-white dark:bg-navy-900 rounded-2xl shadow-xl border border-gray-100 dark:border-navy-800 p-8 transition-colors">
@@ -273,10 +273,10 @@ const Contribute: React.FC = () => {
           {step === 2 && renderStep2()}
           {step === 3 && renderStep3()}
         </div>
-        
+
         <div className="mt-6 text-center text-xs text-gray-400 flex items-center justify-center gap-2">
-            <AlertCircle className="h-4 w-4" />
-            <span>Admins review all submissions to ensure quality and relevance.</span>
+          <AlertCircle className="h-4 w-4" />
+          <span>Admins review all submissions to ensure quality and relevance.</span>
         </div>
       </div>
     </div>

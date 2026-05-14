@@ -130,6 +130,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                         <li><Link to="/pyqs" className="hover:text-brand-orange transition-colors">Previous Year Papers</Link></li>
                         <li><Link to="/notes" className="hover:text-brand-orange transition-colors">Lecture Notes</Link></li>
+                        <li><Link to="/exam-tips" className="hover:text-brand-orange transition-colors">Exam Tips</Link></li>
                         <li><Link to="/ai-tutor" className="hover:text-brand-orange transition-colors">AI Study Buddy</Link></li>
                     </ul>
                 </div>

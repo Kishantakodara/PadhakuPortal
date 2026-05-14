@@ -153,9 +153,10 @@ const Home: React.FC = () => {
           </Link>
 
           {/* Featured Card - Adaptive Style (Light/Dark) */}
-          <div
+          <Link
+            to="/exam-tips"
             id="featured-card-tips"
-            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 cursor-pointer animate-fade-in-up-delay-2 opacity-0"
+            className="relative overflow-hidden bg-white dark:bg-[#0f172a] rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-navy-800 animate-fade-in-up-delay-2 opacity-0"
           >
             <div
               className="absolute top-0 right-0 w-32 h-32 bg-yellow-50 dark:bg-yellow-900/20 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"
@@ -170,7 +171,7 @@ const Home: React.FC = () => {
                 Learn More <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
 
