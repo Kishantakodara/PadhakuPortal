@@ -7,8 +7,8 @@ import { DEPARTMENTS } from '../constants';
 const getPdfSrc = (url: string) => {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   return isMobile
-    ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`
-    : `${url}#toolbar=0`;
+    ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}&page=1`
+    : `${url}#toolbar=0&page=1`;
 };
 import { useParams, Link } from 'react-router-dom';
 import AdPlaceholder from '../components/AdPlaceholder';
@@ -66,6 +66,12 @@ const NoteView: React.FC = () => {
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestion, setSuggestion] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const handleOpenFullscreen = () => {
+    // Scroll to top so the fullscreen overlay starts at top of viewport
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setIsFullscreen(true);
+  };
   
   const handleScrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -266,7 +272,7 @@ const NoteView: React.FC = () => {
                           <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-2">Document Attached</h3>
                           <p className="text-gray-500 mb-6 text-center max-w-md">This note contains a PDF document. You can preview it full-screen directly on the website.</p>
                           <button 
-                            onClick={() => setIsFullscreen(true)} 
+                            onClick={handleOpenFullscreen} 
                             className="bg-brand-orange hover:bg-brand-hover text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md inline-flex items-center gap-2"
                           >
                             <Eye className="h-5 w-5" /> Preview Document

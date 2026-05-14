@@ -6,8 +6,8 @@ import { PYQ } from '../types';
 const getPdfSrc = (url: string) => {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   return isMobile
-    ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`
-    : `${url}#toolbar=0`;
+    ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}&page=1`
+    : `${url}#toolbar=0&page=1`;
 };
 import { DEPARTMENTS } from '../constants';
 
@@ -21,6 +21,12 @@ interface PYQModalProps {
 const PYQModal: React.FC<PYQModalProps> = ({ isOpen, onClose, pyq, onShare }) => {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const infoBoxRef = useRef<HTMLDivElement>(null);
+
+  const handleStartPreview = () => {
+    // Scroll page to top so the fullscreen overlay is anchored correctly
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setIsPreviewing(true);
+  };
 
   useEffect(() => {
     if (isOpen && !isPreviewing && infoBoxRef.current) {
@@ -130,7 +136,7 @@ const PYQModal: React.FC<PYQModalProps> = ({ isOpen, onClose, pyq, onShare }) =>
 
             <div className="flex gap-3">
                 <button 
-                    onClick={() => setIsPreviewing(true)}
+                    onClick={handleStartPreview}
                     className="flex-1 py-3.5 bg-brand-orange hover:bg-brand-hover text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 active:scale-95 transform duration-200"
                 >
                     <Eye className="h-5 w-5" /> Preview Document
