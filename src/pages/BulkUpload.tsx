@@ -45,9 +45,11 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
 
         addLog(`[${i + 1}/${files.length}] Processing ${file.name}...`);
 
-        // Parse from filename: "Computer Networks - S2021 [3140913] [GTURanker].pdf"
-        // Groups: [1]=Subject Name  [2]=S/W  [3]=Year  [4]=Code
-        const match = file.name.match(/^(.+?)\s*-\s*([SW])(\d{4})\s*\[(\d+)\]/i);
+        // Parse from filename:
+        // Format 1: "Computer Networks - S2021 [3140913] [GTURanker].pdf"
+        const match1 = file.name.match(/^(.+?)\s*-\s*([SW])(\d{4})\s*\[(\d+)\]/i);
+        // Format 2: "Summer 2020 - 3140603 - Structural Analysis-I.pdf"
+        const match2 = file.name.match(/^(Summer|Winter|S|W)\s+(\d{4})\s*-\s*(\d+)\s*-\s*(.+?)(?:\.pdf)?$/i);
 
         let subjectName = '';
         let subjectCode = '';
@@ -55,11 +57,22 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
         let semester = 1;
         let season = 'W';
 
-        if (match) {
-          subjectName = match[1].trim();        // e.g. "Computer Networks"
-          season      = match[2].toUpperCase();   // "S" or "W"
-          year        = parseInt(match[3], 10);   // 2021
-          subjectCode = match[4];               // "3140913"
+        if (match1) {
+          subjectName = match1[1].trim();        // e.g. "Computer Networks"
+          season      = match1[2].toUpperCase();   // "S" or "W"
+          year        = parseInt(match1[3], 10);   // 2021
+          subjectCode = match1[4];               // "3140913"
+
+          if (targetSemester !== 'auto') {
+            semester = parseInt(targetSemester, 10);
+          } else if (subjectCode.length >= 3) {
+            semester = parseInt(subjectCode.charAt(2), 10);
+          }
+        } else if (match2) {
+          season      = match2[1].charAt(0).toUpperCase(); // "S" or "W"
+          year        = parseInt(match2[2], 10);           // 2020
+          subjectCode = match2[3];                       // "3140603"
+          subjectName = match2[4].trim();                // "Structural Analysis-I"
 
           if (targetSemester !== 'auto') {
             semester = parseInt(targetSemester, 10);
@@ -74,10 +87,10 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
           const codeMatch = cleanName.match(/\[(\d+)\]/);
           subjectCode = codeMatch ? codeMatch[1] : '';
           
-          // Try to find season/year like S2021 or W2022
-          const yearMatch = cleanName.match(/([SW])(\d{4})/i);
+          // Try to find season/year like S2021 or W2022 or Summer 2020
+          const yearMatch = cleanName.match(/(Summer|Winter|S|W)\s*(\d{4})/i);
           if (yearMatch) {
-            season = yearMatch[1].toUpperCase();
+            season = yearMatch[1].charAt(0).toUpperCase();
             year = parseInt(yearMatch[2], 10);
           }
           
@@ -108,7 +121,8 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
         const title = standardFileName.replace('.pdf', '');
 
         // 1. Upload to Supabase with standardized filename
-        const storagePath = `bulk/${department}/pyqs/${standardFileName}`;
+        const storageFileName = `${Date.now()}_${standardFileName}`;
+        const storagePath = `bulk/${department}/pyqs/${storageFileName}`;
         addLog(`-> Uploading as: ${standardFileName}`);
 
         const { error: uploadError } = await supabaseAdmin.storage
