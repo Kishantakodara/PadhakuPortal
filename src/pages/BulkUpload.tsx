@@ -122,7 +122,7 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
 
         // 1. Upload to Supabase with standardized filename
         const storageFileName = `${Date.now()}_${standardFileName}`;
-        const storagePath = `bulk/${department}/pyqs/${storageFileName}`;
+        const storagePath = `admin/${department}/pyqs/${storageFileName}`;
         addLog(`-> Uploading as: ${standardFileName}`);
 
         const { error: uploadError } = await supabaseAdmin.storage
