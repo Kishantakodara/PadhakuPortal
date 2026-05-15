@@ -336,7 +336,7 @@ const Home: React.FC = () => {
           <div className="relative z-10 flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <Link to="/contribute" className="relative overflow-hidden bg-brand-orange text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-hover transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-1 text-center group">
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:animate-shimmer" />
-              <span className="relative">Upload Notes</span>
+              <span className="relative">Contribute ✨</span>
             </Link>
             <a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-center flex items-center justify-center">
               Join Community
