@@ -37,9 +37,16 @@ const Contribute: React.FC = () => {
       // Path structure: submissions/pyqs/ or submissions/notes/
       const typeFolder = activeTab === 'pyq' ? 'pyqs' : 'notes';
       const storagePath = `submissions/${department}/${typeFolder}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
+      
+      // Convert file to ArrayBuffer to fix "Failed to fetch" on mobile devices (e.g. iOS Safari)
+      const fileData = await file.arrayBuffer();
+
       const { error: uploadError } = await supabase.storage
         .from('Document')
-        .upload(storagePath, file);
+        .upload(storagePath, fileData, {
+          contentType: file.type || 'application/pdf',
+          upsert: false
+        });
 
       if (uploadError) throw uploadError;
 
