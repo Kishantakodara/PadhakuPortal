@@ -49,9 +49,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Logo */}
             <Link to="/home" className="flex items-center gap-2 group shrink-0">
-              <div className="bg-navy-900 dark:bg-transparent p-1.5 rounded-xl group-hover:scale-105 transition-all shadow-md dark:shadow-none shrink-0">
-                <img src="/logo.png" alt="PadhakuPortal Logo" className="h-8 sm:h-12 w-auto max-w-[120px] sm:max-w-[180px] object-contain" />
-              </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight text-navy-900 dark:text-white font-display hidden lg:block whitespace-nowrap">
                 Padhaku<span className="text-brand-orange">Portal</span>
               </span>
