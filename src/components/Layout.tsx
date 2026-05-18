@@ -121,7 +121,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="col-span-1 md:col-span-1">
               <Link to="/home" className="flex items-center gap-2 group mb-4">
                 <div className="bg-navy-900 dark:bg-transparent p-1.5 rounded-lg">
-                  <img src="/logo.png" alt="PadhakuPortal Logo" className="h-10 w-auto object-contain" />
+                  <img src="/logo.png" alt="PadhakuPortal Logo" className="h-8 w-auto object-contain" />
                 </div>
                 <span className="text-lg font-bold text-navy-900 dark:text-white font-display">
                   Padhaku<span className="text-brand-orange">Portal</span>

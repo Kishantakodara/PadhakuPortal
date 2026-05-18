@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface AdPlaceholderProps {
   className?: string;
@@ -6,21 +6,43 @@ interface AdPlaceholderProps {
   label?: string;
 }
 
-const AdPlaceholder: React.FC<AdPlaceholderProps> = ({ className = '', size = 'banner', label = 'Advertisement' }) => {
-  const heightClass = size === 'rectangle' ? 'h-64' : size === 'leaderboard' ? 'h-24' : 'h-32';
+const AdPlaceholder: React.FC<AdPlaceholderProps> = ({ className = '', size = 'banner', label = 'Sponsored' }) => {
+  const containerRef = useRef<HTMLModElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Check if the script is already present in this instance to avoid duplicates
+    const existingScript = containerRef.current.querySelector('script');
+    if (existingScript) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://data527.click/js/responsive.js';
+    script.async = true;
+    
+    containerRef.current.appendChild(script);
+  }, []);
+
+  const heightClass = size === 'rectangle' ? 'min-h-[250px]' : size === 'leaderboard' ? 'min-h-[90px]' : 'min-h-[120px]';
   
   return (
-    <div className={`bg-gray-100/80 dark:bg-navy-800/50 border border-gray-200 dark:border-navy-700 rounded-lg flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 relative overflow-hidden group ${heightClass} ${className} transition-colors`}>
-      {/* Shimmer Effect */}
-      <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/40 dark:via-white/5 to-transparent w-full h-full pointer-events-none" />
+    <div className={`bg-white dark:bg-navy-900 border border-gray-200/50 dark:border-navy-800 rounded-3xl flex flex-col items-center justify-center relative overflow-hidden group ${heightClass} ${className} transition-colors p-4 w-full shadow-sm`}>
+      {/* Subtle label showing it's a sponsored unit */}
+      <span className="absolute top-3 right-4 text-[9px] uppercase tracking-widest font-bold text-gray-400 dark:text-gray-500 bg-gray-50/80 dark:bg-navy-950/80 px-2 py-0.5 rounded border border-gray-150 dark:border-navy-800 pointer-events-none z-10">
+        {label}
+      </span>
       
-      <div className="flex flex-col items-center z-10">
-        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-300 dark:text-gray-600 border border-gray-300 dark:border-navy-600 px-2 py-0.5 rounded mb-2 bg-white/50 dark:bg-navy-900/50">
-          {label}
-        </span>
-        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
-          Sponsored Content
-        </span>
+      {/* Real Advertisement Container */}
+      <div className="w-full flex justify-center items-center py-2 z-0">
+        <ins
+          ref={containerRef as any}
+          style={{ width: '0px', height: '0px', display: 'inline-block' }}
+          data-width="0"
+          data-height="0"
+          className="eb40b3652c7"
+          data-domain="//data527.click"
+          data-affquery="/104387d53f36fc600a7b/b40b3652c7/?placementName=Adverticement"
+        />
       </div>
     </div>
   );
