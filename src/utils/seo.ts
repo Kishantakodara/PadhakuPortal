@@ -72,7 +72,7 @@ const STATIC_ROUTE_META: Record<string, PageMeta> = {
     title: 'Contact PadhakuPortal',
     description: 'Contact PadhakuPortal for corrections, privacy questions, content removal requests, and study material support.',
   },
-  '/privacy-policy': {
+  '/privacypolicy': {
     title: 'Privacy Policy - PadhakuPortal',
     description: 'Read how PadhakuPortal collects, uses, protects, and discloses data, including cookies, analytics, and Google advertising disclosures.',
   },

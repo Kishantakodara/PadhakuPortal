@@ -47,7 +47,8 @@ const App: React.FC = () => {
             {/* Legal / AdSense Pages */}
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/privacy-policy" element={<Navigate to="/privacypolicy" replace />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/terms" element={<Navigate to="/terms-of-service" replace />} />
             <Route path="/disclaimer" element={<Disclaimer />} />

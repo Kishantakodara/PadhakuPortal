@@ -1,6 +1,13 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacypolicy",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/nvidia/:path*",
