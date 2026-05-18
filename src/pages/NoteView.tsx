@@ -11,8 +11,6 @@ const getPdfSrc = (url: string) => {
     : `${url}#toolbar=0&page=1`;
 };
 import { useParams, Link } from 'react-router-dom';
-import AdPlaceholder from '../components/AdPlaceholder';
-import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import FlashcardDeck from '../components/FlashcardDeck';
 import { GoogleGenAI } from '@google/genai';
@@ -429,8 +427,7 @@ const NoteView: React.FC = () => {
                 </nav>
               </div>
 
-              {/* Sidebar Ad Panel */}
-              <AdSidePanel height="h-[400px]" />
+
             </div>
           </aside>
         </div>

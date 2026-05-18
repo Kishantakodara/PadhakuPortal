@@ -9,7 +9,7 @@ const Disclaimer: React.FC = () => {
         
         <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
           <p>
-            If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at support@padhakuportal.com.
+            If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at padhakuportal@gmail.com.
           </p>
 
           <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Disclaimers for PadhakuPortal</h2>

@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2, ShoppingBag, Tag, Calculator, Cpu } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
 import * as Icons from 'lucide-react';
-import AdPlaceholder from '../components/AdPlaceholder';
 import { supabase } from '../supabaseClient';
 import anime from 'animejs';
 
@@ -222,73 +221,65 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Bento Grid Layout for Announcements & Ad */}
+      {/* Notice Board */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Announcements - Span 2 */}
-          <div className="lg:col-span-2 bg-white dark:bg-navy-900 rounded-3xl border border-gray-100 dark:border-navy-800 p-6 md:p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-xl text-red-600 dark:text-red-400">
-                  <Megaphone className="h-5 w-5" />
-                </div>
-                <h2 className="text-xl font-bold text-navy-900 dark:text-white">Notice Board</h2>
+        <div className="bg-white dark:bg-navy-900 rounded-3xl border border-gray-100 dark:border-navy-800 p-6 md:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-xl text-red-600 dark:text-red-400">
+                <Megaphone className="h-5 w-5" />
               </div>
-              <button onClick={() => alert('Notice board coming soon!')} className="text-sm text-gray-500 hover:text-navy-900 font-medium">View All</button>
+              <h2 className="text-xl font-bold text-navy-900 dark:text-white">Notice Board</h2>
             </div>
-            <div className="space-y-3">
-              {loadingAnnouncements ? (
-                <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-                  <Loader2 className="h-8 w-8 animate-spin mb-2" />
-                  <p className="text-sm">Loading announcements...</p>
-                </div>
-              ) : announcements.length > 0 ? (
-                announcements.map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    onClick={() => index === 0 && navigate('/')}
-                    className={`announcement-item group flex items-center justify-between p-4 rounded-2xl border border-transparent transition-all cursor-pointer opacity-0 ${
-                      index === 0 
-                      ? 'bg-gradient-to-r from-orange-50 to-white dark:from-navy-800/80 dark:to-navy-900 border-brand-orange/20 shadow-sm hover:shadow-md' 
-                      : 'bg-gray-50 dark:bg-navy-800/50 hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${index === 0 ? 'bg-brand-orange animate-pulse' : 'bg-brand-orange'}`} />
-                      <div>
-                        <h3 className={`font-semibold transition-colors text-sm md:text-base ${index === 0 ? 'text-navy-900 dark:text-white group-hover:text-brand-orange' : 'text-navy-900 dark:text-gray-100 group-hover:text-brand-orange'}`}>
-                          {item.text}
-                          {index === 0 && <span className="ml-2 text-[10px] text-brand-orange font-black uppercase tracking-tighter">Featured</span>}
-                        </h3>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-xs text-gray-400 flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {item.createdAt
-                              ? new Date(item.createdAt).toLocaleDateString()
-                              : 'Just now'}
-                          </span>
-                          {index === 0 && (
-                             <span className="text-[10px] text-gray-500 font-bold flex items-center gap-1 group-hover:text-brand-orange">
-                               <Sparkles className="h-2.5 w-2.5" /> Click to see what's new
-                             </span>
-                          )}
-                        </div>
+            <button onClick={() => alert('Notice board coming soon!')} className="text-sm text-gray-500 hover:text-navy-900 font-medium">View All</button>
+          </div>
+          <div className="space-y-3">
+            {loadingAnnouncements ? (
+              <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+                <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                <p className="text-sm">Loading announcements...</p>
+              </div>
+            ) : announcements.length > 0 ? (
+              announcements.map((item, index) => (
+                <div 
+                  key={item.id} 
+                  onClick={() => index === 0 && navigate('/')}
+                  className={`announcement-item group flex items-center justify-between p-4 rounded-2xl border border-transparent transition-all cursor-pointer opacity-0 ${
+                    index === 0 
+                    ? 'bg-gradient-to-r from-orange-50 to-white dark:from-navy-800/80 dark:to-navy-900 border-brand-orange/20 shadow-sm hover:shadow-md' 
+                    : 'bg-gray-50 dark:bg-navy-800/50 hover:border-gray-200 dark:hover:border-navy-700 hover:bg-white dark:hover:bg-navy-800'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${index === 0 ? 'bg-brand-orange animate-pulse' : 'bg-brand-orange'}`} />
+                    <div>
+                      <h3 className={`font-semibold transition-colors text-sm md:text-base ${index === 0 ? 'text-navy-900 dark:text-white group-hover:text-brand-orange' : 'text-navy-900 dark:text-gray-100 group-hover:text-brand-orange'}`}>
+                        {item.text}
+                        {index === 0 && <span className="ml-2 text-[10px] text-brand-orange font-black uppercase tracking-tighter">Featured</span>}
+                      </h3>
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {item.createdAt
+                            ? new Date(item.createdAt).toLocaleDateString()
+                            : 'Just now'}
+                        </span>
+                        {index === 0 && (
+                           <span className="text-[10px] text-gray-500 font-bold flex items-center gap-1 group-hover:text-brand-orange">
+                             <Sparkles className="h-2.5 w-2.5" /> Click to see what's new
+                           </span>
+                        )}
                       </div>
                     </div>
-                    <ArrowRight className={`h-4 w-4 transition-colors hidden sm:block ${index === 0 ? 'text-brand-orange translate-x-1' : 'text-gray-300 group-hover:text-brand-orange'}`} />
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-10 text-gray-500 text-sm italic">
-                  No active announcements at the moment. Check back later!
+                  <ArrowRight className={`h-4 w-4 transition-colors hidden sm:block ${index === 0 ? 'text-brand-orange translate-x-1' : 'text-gray-300 group-hover:text-brand-orange'}`} />
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Ad Space - Span 1 */}
-          <div className="h-full">
-            <AdPlaceholder size="rectangle" className="h-full min-h-[300px] rounded-3xl shadow-none border border-dashed border-gray-300 dark:border-navy-700 bg-gray-50/50 dark:bg-navy-900/50" label="Sponsored" />
+              ))
+            ) : (
+              <div className="text-center py-10 text-gray-500 text-sm italic">
+                No active announcements at the moment. Check back later!
+              </div>
+            )}
           </div>
         </div>
       </div>

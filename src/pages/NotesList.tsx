@@ -3,8 +3,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Search, BookOpen, User, Eye, Clock, ChevronDown, SlidersHorizontal, FileText, Loader2 } from 'lucide-react';
 import { DEPARTMENTS, SEMESTERS } from '../constants';
-import AdPlaceholder from '../components/AdPlaceholder';
-import AdSidePanel from '../components/AdSidePanel';
 import { supabase } from '../supabaseClient';
 import { Note } from '../types';
 
@@ -178,11 +176,6 @@ const NotesList: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Sidebar Ad (visible on LG only) */}
-      <div className="hidden lg:block xl:hidden">
-        <AdPlaceholder size="rectangle" label="Pro Tutorials" />
-      </div>
     </div>
   );
 
@@ -228,10 +221,6 @@ const NotesList: React.FC = () => {
               />
             </div>
             
-            {/* List Ad for Mobile */}
-            <div className="lg:hidden mb-6">
-              <AdPlaceholder size="leaderboard" />
-            </div>
 
             {/* Results Grid */}
             {isLoading ? (
@@ -291,17 +280,10 @@ const NotesList: React.FC = () => {
               Showing {filteredNotes.length} results
             </div>
 
-             <div className="mt-8 xl:hidden">
-                <AdPlaceholder size="banner" label="Exam Prep Kit" />
-            </div>
+
           </div>
 
-          {/* Right Sidebar (Ads) - Visible on XL */}
-          <aside className="hidden xl:block w-72 flex-shrink-0">
-             <div className="sticky top-24 space-y-6">
-                <AdSidePanel />
-             </div>
-          </aside>
+
         </div>
       </div>
     </div>

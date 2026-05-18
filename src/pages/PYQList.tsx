@@ -4,8 +4,6 @@ import { Filter, FileText, ChevronDown, Search, SlidersHorizontal, X, ChevronRig
 import { useSearchParams } from 'react-router-dom';
 import { DEPARTMENTS, YEARS, SEMESTERS } from '../constants';
 import { PaperType, FilterState, PYQ } from '../types';
-import AdPlaceholder from '../components/AdPlaceholder';
-import AdSidePanel from '../components/AdSidePanel';
 import ShareModal from '../components/ShareModal';
 import PYQModal from '../components/PYQModal';
 import { supabase } from '../supabaseClient';
@@ -216,10 +214,6 @@ const PYQList: React.FC = () => {
         </div>
       </div>
       
-      {/* Sidebar Ad for smaller screens (hidden on XL where right sidebar takes over) */}
-      <div className="hidden lg:block xl:hidden">
-        <AdPlaceholder size="rectangle" className="rounded-2xl" label="Relevant Course" />
-      </div>
     </div>
   );
 
@@ -332,18 +326,9 @@ const PYQList: React.FC = () => {
               Showing {filteredPYQs.length} papers
             </div>
 
-             <div className="mt-8 xl:hidden">
-                <AdPlaceholder size="banner" className="rounded-2xl" label="Study Gear" />
-            </div>
           </div>
 
-          {/* Right Sidebar (Ads) - Visible only on XL screens */}
-          <aside className="hidden xl:block w-72 flex-shrink-0">
-            <div className="sticky top-24 space-y-6">
-                <AdSidePanel />
-                <AdPlaceholder size="rectangle" className="h-[250px] rounded-2xl" label="University News" />
-            </div>
-          </aside>
+
 
         </div>
       </div>
