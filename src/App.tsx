@@ -43,7 +43,7 @@ const App: React.FC = () => {
             <Route path="/contribute" element={<Contribute />} />
             <Route path="/guides" element={<StudyGuides />} />
             <Route path="/guides/:slug" element={<StudyGuideView />} />
-            
+
             {/* Legal / AdSense Pages */}
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -54,7 +54,7 @@ const App: React.FC = () => {
             <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/exam-tips" element={<ExamTips />} />
-            
+
             <Route path="/bulk-upload" element={<BulkUpload />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={
@@ -63,7 +63,7 @@ const App: React.FC = () => {
               </AdminRoute>
             } />
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-            
+
             {/* Fallback route */}
             <Route path="*" element={<NotFound />} />
           </Routes>

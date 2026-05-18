@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postbuild": "node generate-static-pages.js"
   },
   "dependencies": {
     "@google/genai": "latest",
