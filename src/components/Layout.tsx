@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Bot, User } from 'lucide-react';
+import { Menu, X, Bot, User, Search, Youtube, Send, Github, Linkedin, MessageCircle } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { getRouteMeta, usePageMeta } from '../utils/seo';
+import SearchModal from './SearchModal';
+import CookieConsent from './CookieConsent';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,6 +14,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   usePageMeta(getRouteMeta(location.pathname));
 
@@ -19,6 +22,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const isActive = (path: string) =>
@@ -63,6 +77,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Actions */}
             <div className="hidden md:flex items-center gap-3">
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 text-gray-400 hover:text-navy-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-800 transition-all rounded-full flex items-center gap-1.5"
+                title="Search (Ctrl+K)"
+              >
+                <Search className="h-5 w-5" />
+                <span className="text-[10px] text-gray-400 font-sans border border-gray-200 dark:border-navy-750 px-1 rounded shadow-sm hidden lg:inline">Ctrl+K</span>
+              </button>
               <ThemeToggle />
 
               <Link to="/admin" className="p-2 text-gray-400 hover:text-navy-900 dark:hover:text-white transition-colors">
@@ -72,6 +94,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center gap-3">
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-brand-orange transition-colors"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
               <ThemeToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -85,6 +114,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden pt-4 pb-2 space-y-1 border-t border-gray-100 dark:border-navy-700 mt-2">
+              <button 
+                onClick={() => { setIsMobileMenuOpen(false); setIsSearchOpen(true); }}
+                className="w-full text-left px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800 flex items-center gap-2"
+              >
+                <Search className="h-4 w-4 text-brand-orange" /> Search Portal
+              </button>
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-navy-900 dark:text-white hover:bg-gray-50 dark:hover:bg-navy-800">Home</Link>
               <Link to="/pyqs" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">PYQs</Link>
               <Link to="/notes" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">Notes</Link>
@@ -122,6 +157,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
                 Your academic success partner. Access study materials, notes, and exam papers in one organized place.
               </p>
+              <div className="flex items-center gap-3 mt-5">
+                <a href="https://youtube.com/@padhakuportal" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 dark:bg-navy-850 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 flex items-center justify-center border border-gray-100 dark:border-navy-800 transition-colors text-gray-400" title="YouTube">
+                  <Youtube className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+                <a href="https://t.me/padhakuportal" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 dark:bg-navy-850 hover:bg-blue-50 dark:hover:bg-blue-950/20 hover:text-blue-400 flex items-center justify-center border border-gray-100 dark:border-navy-800 transition-colors text-gray-400" title="Telegram">
+                  <Send className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+                <a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 dark:bg-navy-850 hover:bg-green-50 dark:hover:bg-green-950/20 hover:text-green-500 flex items-center justify-center border border-gray-100 dark:border-navy-800 transition-colors text-gray-400" title="WhatsApp Community">
+                  <MessageCircle className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+                <a href="https://linkedin.com/company/padhakuportal" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 dark:bg-navy-850 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 hover:text-indigo-500 flex items-center justify-center border border-gray-100 dark:border-navy-800 transition-colors text-gray-400" title="LinkedIn">
+                  <Linkedin className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+                <a href="https://github.com/padhakuportal" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 dark:bg-navy-850 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white flex items-center justify-center border border-gray-100 dark:border-navy-800 transition-colors text-gray-400" title="GitHub">
+                  <Github className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+              </div>
             </div>
 
             <div>
@@ -152,6 +204,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/terms-of-service" className="hover:text-brand-orange transition-colors">Terms of Service</Link></li>
                 <li><Link to="/disclaimer" className="hover:text-brand-orange transition-colors">Disclaimer</Link></li>
                 <li><Link to="/sitemap" className="hover:text-brand-orange transition-colors">HTML Sitemap</Link></li>
+                <li><button onClick={() => setIsSearchOpen(true)} className="hover:text-brand-orange transition-colors text-left w-full outline-none">Search Portal</button></li>
                 <li><Link to="/admin" className="hover:text-brand-orange transition-colors mt-2 block opacity-50 hover:opacity-100">Admin Login</Link></li>
               </ul>
             </div>
@@ -161,6 +214,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </footer>
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <CookieConsent />
     </div>
   );
 };

@@ -3,6 +3,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:; media-src 'self' data: https:; connect-src 'self' https: wss:;" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PadhakuPortal",
+      "url": "https://padhakuportal.in",
+      "logo": "https://padhakuportal.in/logo.png",
+      "email": "padhakuportal@gmail.com"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PadhakuPortal",
+      "url": "https://padhakuportal.in",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://padhakuportal.in/ai-tutor?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="PadhakuPortal helps engineering students find previous year question papers, study notes, exam guides, and practical revision strategies." />
     <meta name="robots" content="index,follow" />

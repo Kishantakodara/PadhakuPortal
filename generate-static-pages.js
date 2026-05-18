@@ -232,31 +232,53 @@ const homepageFallbackContent = `
     </div>
   </header>
 
-  <main style="flex: 1; max-width: 800px; margin: 48px auto; padding: 0 20px; line-height: 1.7;">
-    <h1 style="color: #0f172a; font-size: 38px; font-weight: 800; text-align: center; margin-bottom: 24px; letter-spacing: -0.025em; line-height: 1.2;">PadhakuPortal - Free Engineering Study Materials, Notes &amp; PYQs</h1>
+  <main style="flex: 1; max-width: 900px; margin: 48px auto; padding: 0 24px; line-height: 1.8;">
+    <h1 style="color: #0f172a; font-size: 42px; font-weight: 800; text-align: center; margin-bottom: 24px; letter-spacing: -0.025em; line-height: 1.2;">PadhakuPortal - Free Engineering Study Materials, Handwritten Notes &amp; Previous Year Papers</h1>
     
-    <p style="font-size: 18px; color: #334155; line-height: 1.8; text-align: center; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">
-      Welcome to <strong>PadhakuPortal</strong>, the premier academic platform tailored specifically for engineering students. We provide a comprehensive, organized repository of high-quality study materials, hand-written lecture notes, previous year question papers (PYQs), practical exam viva guides, and expert revision strategies designed to help you excel in your semester exams.
+    <p style="font-size: 18px; color: #334155; line-height: 1.8; text-align: center; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
+      Welcome to <strong>PadhakuPortal</strong>, the premier academic platform custom-built for engineering undergraduate students. We deliver an integrated, highly organized collection of hand-written class notes, verified previous year question papers (PYQs), comprehensive study guides, practical lab viva cheat sheets, and evidence-based revision planning resources designed to support and accelerate your semester preparation.
     </p>
     
-    <h2 style="color: #0f172a; font-size: 24px; font-weight: 700; margin-top: 48px; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Why Engineering Students Trust PadhakuPortal</h2>
-    <ul style="padding-left: 24px; margin-bottom: 32px; font-size: 16px; color: #334155;">
-      <li style="margin-bottom: 12px;"><strong>Comprehensive Branch-wise Notes:</strong> Access structured notes covering major branches like Computer Science (CSE), Information Technology (IT), Mechanical, Civil, and Electronics &amp; Communication Engineering (ECE).</li>
-      <li style="margin-bottom: 12px;"><strong>Verified University PYQs:</strong> Practice with real semester exam papers to understand questioning styles, grading criteria, and recurring questions.</li>
-      <li style="margin-bottom: 12px;"><strong>AI Study Tutor Support:</strong> Leverage our tailored engineering AI assistant to simplify advanced mathematical proofs, explain complex coding logic, and summarize extensive chapters.</li>
-      <li style="margin-bottom: 12px;"><strong>Academic Guidelines &amp; Viva Tips:</strong> Gain insights from specialized preparation articles, exam tips, and practical guides designed to secure top performance in lab assessments.</li>
+    <h2 style="color: #0f172a; font-size: 26px; font-weight: 700; margin-top: 48px; margin-bottom: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">1. Engineering Branches We Cover</h2>
+    <p style="color: #334155; margin-bottom: 16px;">
+      At PadhakuPortal, we recognize that different engineering fields present distinct mathematical and conceptual challenges. We categorize and verify resources across five core branches to ensure maximum academic relevance:
+    </p>
+    <ul style="padding-left: 24px; margin-bottom: 32px; font-size: 16px; color: #334155; line-height: 2;">
+      <li style="margin-bottom: 8px;"><strong>Computer Science &amp; IT (CSE/IT):</strong> High-quality lectures and notes spanning Data Structures, Advanced Algorithms, Theory of Computation, Operating Systems, Database Management Systems (DBMS), and Computer Networks.</li>
+      <li style="margin-bottom: 8px;"><strong>Electronics &amp; Communication (ECE):</strong> Elaborate revision keys for Digital Electronics, Microprocessors, Signals &amp; Systems, Analog Communications, VLSI Design, and Embedded Controllers.</li>
+      <li style="margin-bottom: 8px;"><strong>Mechanical Engineering (ME):</strong> Step-by-step mathematical proofs and summaries covering Engineering Thermodynamics, Fluid Mechanics, Strength of Materials, Heat Transfer, and Kinematics of Machines.</li>
+      <li style="margin-bottom: 8px;"><strong>Civil Engineering (CE):</strong> Practical summaries for Structural Analysis, Environmental Engineering, Geotechnical Soil Dynamics, Surveying, and Transportation Engineering.</li>
+      <li style="margin-bottom: 8px;"><strong>Applied Sciences &amp; Humanities:</strong> Support for first-year standard engineering syllabi, covering Engineering Mathematics, Physics, Chemistry, Basic Electrical Engineering, and Mechanics.</li>
     </ul>
 
-    <h2 style="color: #0f172a; font-size: 24px; font-weight: 700; margin-top: 40px; margin-bottom: 16px;">Quick Syllabus Navigation</h2>
-    <p style="color: #334155; font-size: 16px; margin-bottom: 24px;">
-      Find notes and questions organized by your university curriculum, branch, and semester. Skip the endless search in community chats and direct message drives. Start studying with PadhakuPortal's highly structured, curated resources now.
+    <h2 style="color: #0f172a; font-size: 26px; font-weight: 700; margin-top: 40px; margin-bottom: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">2. Leverage Previous Year Papers (PYQs) for Success</h2>
+    <p style="color: #334155; margin-bottom: 16px;">
+      Solving past university exams is scientifically proven to be one of the most effective ways to study. PadhakuPortal organizes past papers to make retrieval effortless:
+    </p>
+    <p style="color: #334155; margin-bottom: 16px;">
+      By reviewing our verified PYQ collections, you can identify high-weightage topics, understand grading expectations, practice writing speed, and learn to structure your answers logically. We categorize papers by <strong>Mid-Semester Assessments</strong>, <strong>End-Semester University Examinations</strong>, and <strong>Practical/Lab Evaluations</strong> so you always prepare for the specific test structure.
+    </p>
+
+    <h2 style="color: #0f172a; font-size: 26px; font-weight: 700; margin-top: 40px; margin-bottom: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">3. AI Tutor: Instant Engineering Simplification</h2>
+    <p style="color: #334155; margin-bottom: 16px;">
+      Have you ever read a textbook chapter and felt completely stuck on a derivation or programming script? Our <strong>AI Study Tutor</strong> is here to resolve your doubts instantly. Built on advanced language algorithms, the AI Tutor is optimized specifically to explain difficult engineering concepts, write sample code, solve mathematical derivations, and summarize lecture handouts in easy-to-understand student language. Ask academic questions and receive structured replies, diagrams, or explanations within seconds.
+    </p>
+
+    <h2 style="color: #0f172a; font-size: 26px; font-weight: 700; margin-top: 40px; margin-bottom: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">4. Maintain Academic Integrity &amp; Quality Standards</h2>
+    <p style="color: #334155; margin-bottom: 16px;">
+      We believe in building a trustworthy educational ecosystem. Every single study guide, revision file, or exam paper uploaded to our platform is vetted and reviewed by our administrative team before going live. This strict quality barrier filters out spam, irrelevant material, and low-quality files, keeping the library clean, accurate, and highly valuable. We also enforce student privacy, cookie disclosures, and copyright safety protocols to remain fully transparent and compliant with international Web standards.
+    </p>
+
+    <h2 style="color: #0f172a; font-size: 26px; font-weight: 700; margin-top: 40px; margin-bottom: 16px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">5. Join the Student Contribution Movement</h2>
+    <p style="color: #334155; margin-bottom: 16px;">
+      PadhakuPortal is created for students, by students. If you have well-written lecture notes, exam papers, or practical revision guidelines, you can easily share them with the community. By uploading your materials via our <strong>Contribute</strong> page, you help build a free, reliable, and accessible academic support library for thousands of other students. Let's work together to make engineering learning stress-free and collaborative!
     </p>
   </main>
 
   <footer style="padding: 40px 20px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; text-align: center; font-size: 14px; color: #64748b;">
     <div style="max-width: 1000px; margin: 0 auto;">
-      <p style="margin-bottom: 16px; font-weight: 500;">&copy; 2026 PadhakuPortal. All rights reserved. Built for engineering excellence.</p>
-      <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; font-weight: 600;">
+      <p style="margin-bottom: 16px; font-weight: 500;">&copy; 2026 PadhakuPortal Education. Built for engineering excellence and student support.</p>
+      <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; font-weight: 600; margin-bottom: 16px;">
         <a href="/privacy-policy" style="color: #f97316; text-decoration: none;">Privacy Policy</a>
         <a href="/privacypolicy" style="color: #64748b; text-decoration: none;">Privacy Policy Alternate</a>
         <a href="/terms-of-service" style="color: #64748b; text-decoration: none;">Terms of Service</a>
@@ -266,6 +288,9 @@ const homepageFallbackContent = `
         <a href="/about" style="color: #64748b; text-decoration: none;">About Us</a>
         <a href="/sitemap" style="color: #64748b; text-decoration: none;">Sitemap</a>
       </div>
+      <p style="font-size: 12px; color: #94a3b8; max-width: 700px; margin: 0 auto; line-height: 1.5;">
+        Disclaimer: PadhakuPortal is an independent student platform. We provide study notes and resources for exam revision support. We are not officially affiliated with or endorsed by any specific university, engineering college, or government board. Always verify syllabus details against official university announcements.
+      </p>
     </div>
   </footer>
 </div>

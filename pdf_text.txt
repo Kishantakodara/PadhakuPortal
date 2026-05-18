@@ -1,0 +1,313 @@
+✅  G o o d  -  M in o r F ix e s  N e e d e d
+Y o u r s ite  is  o n  th e  rig h t tra c k . A d d re s s  th e  h ig h lig h te d  is s u e s  b e fo re  a pply in g  fo r
+A d S e n s e .
+6 0 %
+A P P R O V A L  O D D S
+Next-Gen AI AdSense Diagnostic Suite 2026
+Is Your Site 
+AdSense Ready?
+Run a 54-point AI audit on your domain. We analyze content depth,
+security headers, SEO architecture, and legal compliance in 15
+seconds.
+A n a ly z e  D o m a inpa d h a k u po rta l.in
+DOMAIN AUTHORITY
+padhakuportal.in
+Age: Not found
+Status: Active & Secured
+CONTENT QUALITY
+229 Words
+Semantic HTML: Compliant
+Authored: Yes
+TECHNICAL PERFORMANCE
+0.62s Latency
+Mobile Ready: Yes
+Compression: Active
+SECURITY & COMPLIANCE
+Hardened
+Privacy Page: Detected
+HSTS/CSP: Yes
+Critical Approval Roadblock (1)
+P D F  R e po rt S h a re
+X Thin Content
+Add more high-quality content - aim for 600+ words per article
+Full Deep-Dive Report
+Domain Criteria 2/5 OK
+Domain Name PADHAKUPORTAL.IN
+Is Website Available YES
+Is Website Secured
+Site uses HTTPS encryption
+SSL INSTALLED
+Domain Length
+Domain is a bit long
+16 CHARACTERS
+Top Level Domain
+Consider using .com, .org, or .net
+TLD: .IN
+Domain Age
+Domain age could not be verified
+UNABLE TO DETERMINE
+Registrar UNKNOWN
+Site Availability 5/5 OK
+Website Accessible
+HTTP Status: 200
+YES
+Response Time 0MS
+robots.txt Present YES
+sitemap.xml Present YES
+Noindex Check
+No blocking tags found
+PASSED
+Site Content 6/8 OK
+Page TitlePADHAKUPORTAL - ENGINEERING NOTES, PYQS AND STUDY GUIDES
+Meta Description PRESENT
+Semantic HTML
+Found structural tags: header, nav, main, footer
+YES
+Word Count
+Aim for 600+ words
+229 WORDS
+Author Info
+Bylines build E-A-T trust
+FOUND
+Privacy Policy FOUND
+Contact Info FOUND
+Cookie Consent MISSING
+Search Function NOT FOUND
+A d S e n s e  C h e c k e r
+SEO Analysis 4/7 OK
+Mobile Viewport YES
+Schema Markup
+Recommended for 2026 SEO
+NOT FOUND
+Analytics Tools
+GA4/GTM usage detected
+NOT FOUND
+Social Links
+Presence on Social Media builds trust
+NONE
+Images with ALT 0/0
+Internal Links 13 LINKS
+H1 Optimization OPTIMAL
+Security & Speed 3/4 OK
+Load Time 0.62S
+HTTPS Enabled YES
+HSTS Status ACTIVE
+CSP Protection MISSING
+2026 Interactive Eligibility Auditor (AI Assisted)
+We have pre-filled the technical items from your live analysis. Manually confirm the
+remaining policy questions to calculate your official AdSense Readiness Score.
+Expand All
+ Collapse All
+ Reset Audit
+🔍 SEO & SITE STRUCTURE
+12/15 ITEMS • 30 WEIGHT
+22/30
+73% INTENSITY
+Pre-Verify All Clear Items
+META TAGS & PAGE TITLES(6 PTS) 6/6
+Title tag present and ≤  60 characters +2 Pts
+Meta description present and ≤  160 characters +2 Pts
+Open Graph / Twitter meta tags present +2 Pts
+HEADINGS & STRUCTURE(5 PTS) 5/5
+A U D IT  P R O G R E S S :  2 0  /  5 4  P O IN T S 3 7 %
+3 6 %
+R E A D IN E S S
+3 3 %
+P R O B A B IL IT Y
+Page has one <h1> and meaningful <h2>/<h3> structure +3 Pts
+No heading tag misuse (e.g., multiple h1s) +2 Pts
+INDEXING & CRAWLABILITY(5 PTS) 5/5
+robots.txt file present and valid +1 Pts
+sitemap.xml accessible +1 Pts
+noindex not set on main pages +1 Pts
+Canonical tags used properly +2 Pts
+SCHEMA MARKUP(4 PTS) 0/4
+JSON-LD or Microdata schema present (Article, Organization,
+etc.)
++4 Pts
+Add structured data (Schema.org markup) like Article, Organization, BreadcrumbList, or
+FAQPage to help search engines understand your content and potentially enable rich snippets.
+KB-DIAGNOSTIC
+INTERNAL LINKING(5 PTS) 3/5
+Interlinking between articles/pages exists +3 Pts
+No broken internal links (simulated) +2 Pts
+Regularly check for and fix broken internal links to improve user experience and crawlability.
+Use tools like Screaming Frog.
+MOBILE SEO & ACCESSIBILITY(5 PTS) 3/5
+Mobile-friendly viewport configured +1 Pts
+ALT text on images (simulated check on prominent images) +2 Pts
+Provide descriptive alt text for all important images to improve accessibility for visually
+impaired users and provide context to search engines.
+Semantic HTML tags (header, nav, footer) used +2 Pts
+📝 CONTENT QUALITY & COMPLIANCE
+5/18 ITEMS • 30 WEIGHT
+8/30
+27% INTENSITY
+Pre-Verify All Clear Items
+ARTICLE COUNT & DEPTH(8 PTS) 0/8
+Minimum 20 indexed articles (simulated) +2 Pts
+Aim for at least 20-30 high-quality, indexed articles or pages to show site substance. Quality
+over quantity is key.
+Minimum 600 words per article (average, simulated) +2 Pts
+Ensure articles are substantial and provide depth. For informational content, 600+ words is a
+good guideline, but value matters most.
+Original content (simulated plagiarism/AI check >80% original)+2 Pts
+Content must be original and unique. Avoid plagiarism and ensure any AI-generated content is
+heavily edited, fact-checked, and provides unique value.
+Clear, useful language (simulated Flesch score > 60) +2 Pts
+Write clearly and concisely for your target audience. Aim for a Flesch Reading Ease score of 60
+or higher for general audiences.
+E-A-T SIGNALS(7 PTS) 2/7
+Author info or byline present +2 Pts
+Site mentions credentials or experience +1 Pts
+Showcase any relevant credentials, expertise, awards, or experience on your 'About Us' page
+or author bios to build trust.
+External backlinks to trusted sources (simulated) +2 Pts
+Link out to authoritative and relevant external sources where appropriate to support your
+content and demonstrate research.
+Outbound links open in new tab with rel attributes (e.g.,
+noopener)
++2 Pts
+Ensure external links open in a new tab (target="_blank") and use rel="noopener noreferrer"
+for security.
+LEGAL & TRUST PAGES(8 PTS) 6/8
+Privacy Policy page present & comprehensive +2 Pts
+Terms & Conditions page present & clear +2 Pts
+Disclaimer page present (if applicable) & visible +1 Pts
+Provide a Disclaimer page, especially if offering advice (financial, health, legal, etc.) or using
+affiliate links. Make it easy to find.
+Contact Us page with functional, real email/form +1 Pts
+About Us page with transparent person/entity details +1 Pts
+Cookie Consent mechanism functional (for EU/GDPR traffic) +1 Pts
+If targeting EU users, implement a functional, GDPR-compliant cookie consent banner that
+allows users to accept/reject non-essential cookies before they are set.
+ADSENSE CONTENT POLICY COMPLIANCE(7 PTS) 0/7
+No adult/pirated/violent/dangerous content +3 Pts
+Strictly adhere to AdSense content policies. Remove any content related to adult themes,
+pirated software/media, violence, hate speech, illegal drugs, weapons, etc.
+KB-DIAGNOSTIC
+No excessive profanity or hate speech +1 Pts
+Maintain a professional tone and avoid excessive profanity, offensive language, or hate speech.
+No misleading health or financial claims +2 Pts
+Avoid making unsubstantiated or misleading claims, especially in health and finance niches
+(YMYL). Content should be accurate and trustworthy.
+No scraped or spun content +1 Pts
+All content must be original and provide unique value. Scraped, aggregated, or heavily spun
+content will lead to rejection.
+⚡ TECHNICAL PERFORMANCE
+2/9 ITEMS • 20 WEIGHT
+5/20
+25% INTENSITY
+Pre-Verify All Clear Items
+PAGE SPEED(5 PTS) 0/5
+Google PSI score > 70 desktop (simulated) +2 Pts
+Aim for a Google PageSpeed Insights score above 70 for desktop. Optimize images, leverage
+browser caching, and minimize render-blocking resources.
+KB-DIAGNOSTIC
+Google PSI score > 50 mobile (simulated) +3 Pts
+Mobile speed is critical. Aim for a Google PageSpeed Insights score above 50 for mobile.
+Prioritize above-the-fold content loading.
+CORE WEB VITALS(5 PTS) 0/5
+LCP < 2.5s (simulated) +2 Pts
+Largest Contentful Paint should be under 2.5 seconds. Optimize server response times and
+resource load times.
+KB-DIAGNOSTIC
+CLS < 0.1 (simulated) +2 Pts
+Cumulative Layout Shift should be under 0.1. Always include size attributes on images and
+videos, and reserve space for ads.
+KB-DIAGNOSTIC
+FID < 100ms / INP good (simulated) +1 Pts
+First Input Delay should be under 100ms. Break up long JavaScript tasks and optimize event
+handlers.
+KB-DIAGNOSTIC
+SECURE SITE (HTTPS)(2 PTS) 2/2
+Valid SSL cert, no mixed content +2 Pts
+RESPONSIVE LAYOUT & VIEWPORT(3 PTS) 3/3
+Uses media queries and scales on mobile +3 Pts
+404/BROKEN LINKS & ERRORS(5 PTS) 0/5
+No 404 errors on main pages +3 Pts
+Regularly scan for and fix 404 errors. Set up proper 301 redirects for deleted or moved pages.
+No broken internal or external links (simulated) +2 Pts
+Regularly scan for and fix broken internal and external links. Broken links frustrate users and
+can harm SEO.
+🎯
+USER EXPERIENCE & ENGAGEMENT
+SIGNALS
+1/12 ITEMS • 20 WEIGHT
+1/20
+5%
+INTENSITY
+Pre-Verify All Clear Items
+UI/UX SIGNALS(5 PTS) 0/5
+Clean, professional design with good readability +2 Pts
+Maintain a clean, professional design that instills trust in visitors. Use readable fonts and proper
+contrast.
+No excessive ads/pop-ups, intrusive interstitials avoided +2 Pts
+Avoid cluttering your site with excessive ads, intrusive pop-ups, or interstitials that block
+content.
+Readable fonts and adequate text sizes +1 Pts
+Use readable fonts with appropriate sizing (minimum 16px for body text) for comfortable
+reading.
+NAVIGATION AND SITEMAP(3 PTS) 1/3
+Navigation bar/menu present on all pages +1 Pts
+Breadcrumbs or footer nav exists +1 Pts
+Implement breadcrumbs for easier navigation on content-rich sites or ensure a comprehensive
+footer navigation.
+HTML sitemap or clear sidebar links +1 Pts
+Provide an HTML sitemap or clear sidebar navigation for users to easily find content.
+ENGAGEMENT & ANALYTICS(4 PTS) 0/4
+Google Analytics or similar script installed (simulated) +2 Pts
+Install Google Analytics or a similar analytics platform to track and understand your traffic
+patterns.
+Comments or user interaction visible (optional, but good) +1 Pts
+Encourage user engagement through comments sections or forums if appropriate for your
+site's niche and content.
+Bounce rate indicators (simulated, e.g., <70%) +1 Pts
+Monitor bounce rate; high bounce rates might indicate poor content relevance, UX issues, or
+slow loading times.
+BACKLINK & TRAFFIC SIGNALS(8 PTS) 0/8
+Some organic traffic (simulated > 0) +3 Pts
+Your site should have organic traffic from search engines. Focus on SEO and content marketing
+to build traffic.
+Backlink count > 10 (simulated, even small ones) +2 Pts
+Build quality backlinks from other websites to improve your domain authority and
+trustworthiness.
+At least 2 pages indexed in Google (simulated) +3 Pts
+Ensure your key pages are indexed by Google. Check using 'site:yourdomain.com' search in
+Google and monitor Google Search Console.
+Generate Readiness Report
+ Reset Audit
+RE-RUN AI SCAN
+TECHNICAL DISCLAIMER 2026
+Our diagnostic systems use live-scraping, WHOIS protocols, and architectural pattern recognition to
+generate this report. While our AI achieves high predictive accuracy for AdSense Eligibility, the final
+decision remains with Google LLC. This tool is not affiliated with or endorsed by Google.
+AdSense Checker
+The most comprehensive free tool to check your
+website's Google AdSense eligibility. Analyze domain
+age, content quality, SEO structure, and technical
+requirements instantly.
+FREE TOOLS
+Website Analyzer
+Eligibility Checklist
+Revenue Calculator
+Policy Generator
+SEO Checklist
+RESOURCES
+How to Get Approved
+Rejection Reasons
+Tips & Tricks
+Policy Checklist
+Blog
+FAQ
+COMPANY
+About Us
+Contact
+Privacy Policy
+Terms of Service
+Sitemap
+GET ADSENSE TIPS
+Email address
+© 2025 AdSense Approval Checker. All rights reserved.
+This tool provides website analysis based on common Google AdSense requirements. We are not affiliated with Google.
+Always refer to officialGoogle AdSense documentation for definitive guidance.
