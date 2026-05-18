@@ -148,7 +148,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div>
               <h4 className="font-bold text-navy-900 dark:text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li><Link to="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/privacy%20policy" className="hover:text-brand-orange transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service" className="hover:text-brand-orange transition-colors">Terms of Service</Link></li>
                 <li><Link to="/disclaimer" className="hover:text-brand-orange transition-colors">Disclaimer</Link></li>
                 <li><Link to="/sitemap" className="hover:text-brand-orange transition-colors">HTML Sitemap</Link></li>

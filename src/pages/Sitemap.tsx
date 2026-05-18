@@ -15,7 +15,7 @@ const resourceLinks = [
 const trustLinks = [
   { title: 'About', path: '/about' },
   { title: 'Contact', path: '/contact' },
-  { title: 'Privacy Policy', path: '/privacy-policy' },
+  { title: 'Privacy Policy', path: '/privacy%20policy' },
   { title: 'Terms of Service', path: '/terms-of-service' },
   { title: 'Disclaimer', path: '/disclaimer' },
 ];
