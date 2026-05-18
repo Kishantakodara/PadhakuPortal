@@ -27,7 +27,8 @@ const BulkUpload = ({ embedded = false }: { embedded?: boolean }) => {
   const handleFolderSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
-    const files = Array.from(e.target.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+    const selectedFiles = Array.from(e.target.files) as File[];
+    const files = selectedFiles.filter(file => file.name.toLowerCase().endsWith('.pdf'));
     if (files.length === 0) {
       addLog('No PDF files found in the selected folder.');
       return;

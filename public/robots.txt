@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /bulk-upload
+
+Sitemap: https://padhakuportal.in/sitemap.xml

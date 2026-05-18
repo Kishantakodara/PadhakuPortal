@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import Layout from './components/Layout';
@@ -18,11 +18,14 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Disclaimer from './pages/Disclaimer';
 import ExamTips from './pages/ExamTips';
+import StudyGuides from './pages/StudyGuides';
+import StudyGuideView from './pages/StudyGuideView';
+import Sitemap from './pages/Sitemap';
+import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
 import BulkUpload from './pages/BulkUpload';
-import Welcome from './pages/Welcome';
 
 const App: React.FC = () => {
   return (
@@ -31,20 +34,24 @@ const App: React.FC = () => {
       <AuthProvider>
         <Layout>
           <Routes>
-            <Route path="/" element={<Welcome />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Navigate to="/" replace />} />
             <Route path="/pyqs" element={<PYQList />} />
             <Route path="/notes" element={<NotesList />} />
             <Route path="/notes/:id" element={<NoteView />} />
             <Route path="/ai-tutor" element={<AIChat />} />
             <Route path="/contribute" element={<Contribute />} />
+            <Route path="/guides" element={<StudyGuides />} />
+            <Route path="/guides/:slug" element={<StudyGuideView />} />
             
             {/* Legal / AdSense Pages */}
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/terms" element={<Navigate to="/terms-of-service" replace />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/exam-tips" element={<ExamTips />} />
             
             <Route path="/bulk-upload" element={<BulkUpload />} />
@@ -57,7 +64,7 @@ const App: React.FC = () => {
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             
             {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/home" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </AuthProvider>

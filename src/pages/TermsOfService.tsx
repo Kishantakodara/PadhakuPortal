@@ -3,44 +3,81 @@ import React from 'react';
 const TermsOfService: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
-      <div className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
-        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-6">Terms of Service</h1>
-        <p className="text-sm text-gray-500 mb-8">Last updated: {new Date().toLocaleDateString()}</p>
-        
+      <article className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
+        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-4">Terms of Service</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: May 18, 2026</p>
+
         <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">1. Terms</h2>
           <p>
-            By accessing this Website, accessible from PadhakuPortal, you are agreeing to be bound by these Website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws. If you disagree with any of these terms, you are prohibited from accessing this site. The materials contained in this Website are protected by copyright and trade mark law.
+            These Terms of Service govern your use of PadhakuPortal. By using the website, you agree to use it for
+            lawful educational purposes and to respect the rights of students, authors, institutions, and other users.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">2. Use License</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Educational Use</h2>
           <p>
-            Permission is granted to temporarily download one copy of the materials on PadhakuPortal's Website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+            PadhakuPortal provides study resources, previous year question papers, notes, guides, and AI-assisted
+            explanations for learning support. The website is not a substitute for official university instructions,
+            faculty guidance, or original study. You are responsible for checking important academic details against
+            official sources.
           </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Acceptable Use</h2>
+          <p>You agree not to use PadhakuPortal to:</p>
           <ul>
-            <li>modify or copy the materials;</li>
-            <li>use the materials for any commercial purpose or for any public display;</li>
-            <li>attempt to reverse engineer any software contained on PadhakuPortal's Website;</li>
-            <li>remove any copyright or other proprietary notations from the materials; or</li>
-            <li>transfer the materials to another person or "mirror" the materials on any other server.</li>
+            <li>Upload or share copyrighted material unless you have permission or a lawful right to share it.</li>
+            <li>Submit false, misleading, harmful, adult, violent, hateful, illegal, or deceptive content.</li>
+            <li>Impersonate another person, institution, author, or organization.</li>
+            <li>Attempt to disrupt the website, bypass security, scrape content at abusive scale, or misuse the AI Tutor.</li>
+            <li>Upload private personal data, IDs, passwords, confidential records, or exam-cheating material.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">3. Disclaimer</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Contributed Material</h2>
           <p>
-            All the materials on PadhakuPortal's Website are provided "as is". PadhakuPortal makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, PadhakuPortal does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.
+            If you contribute notes, papers, titles, author names, or other educational material, you confirm that you
+            have the right to submit it and that it does not violate copyright, privacy, academic-integrity rules, or
+            applicable law. Submissions may be reviewed, edited for formatting, rejected, unpublished, or removed.
+          </p>
+          <p>
+            You keep ownership of content you created, but you grant PadhakuPortal permission to host, display, organize,
+            and make the submitted material available for educational use on the website. If you need content removed,
+            contact <a href="mailto:padhakuportal@gmail.com" className="text-brand-orange hover:underline">padhakuportal@gmail.com</a>.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">4. Limitations</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">AI Tutor and Accuracy</h2>
           <p>
-            PadhakuPortal or its suppliers will not be hold accountable for any damages that will arise with the use or inability to use the materials on PadhakuPortal's Website, even if PadhakuPortal or an authorize representative of this Website has been notified, orally or written, of the possibility of such damage.
+            AI-generated responses can contain mistakes or incomplete explanations. Use AI Tutor outputs as study
+            assistance only, and verify important facts, formulas, legal requirements, academic deadlines, and exam
+            instructions with reliable sources.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">5. Revisions and Errata</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Intellectual Property</h2>
           <p>
-            The materials appearing on PadhakuPortal's Website may include technical, typographical, or photographic errors. PadhakuPortal will not promise that any of the materials in this Website are accurate, complete, or current. PadhakuPortal may change the materials contained on its Website at any time without notice.
+            Site branding, interface elements, original guide content, and site organization belong to PadhakuPortal or
+            their respective owners. Third-party names, college names, exam names, and logos remain the property of their
+            owners. PadhakuPortal does not claim official affiliation unless expressly stated.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">External Links and Services</h2>
+          <p>
+            The website may link to external communities, tools, forms, files, or service providers. We are not
+            responsible for external websites, their content, or their privacy practices. Review external terms before
+            submitting information outside PadhakuPortal.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Changes and Availability</h2>
+          <p>
+            We may update resources, remove content, change features, or revise these terms as the website evolves. We
+            also may suspend or restrict access if content or behavior appears abusive, unlawful, misleading, or harmful
+            to students.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Contact</h2>
+          <p>
+            For questions about these terms, corrections, or content concerns, contact{' '}
+            <a href="mailto:padhakuportal@gmail.com" className="text-brand-orange hover:underline">padhakuportal@gmail.com</a>.
           </p>
         </div>
-      </div>
+      </article>
     </div>
   );
 };

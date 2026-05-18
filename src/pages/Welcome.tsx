@@ -9,7 +9,7 @@ const Welcome: React.FC = () => {
 
   useEffect(() => {
     if (hasSeenSplash) {
-      navigate('/home', { replace: true });
+      navigate('/', { replace: true });
       return;
     }
 
@@ -33,7 +33,7 @@ const Welcome: React.FC = () => {
           duration: 800,
           easing: 'easeInOutQuad',
           complete: () => {
-            navigate('/home');
+            navigate('/');
           }
         });
       }
@@ -113,7 +113,7 @@ const Welcome: React.FC = () => {
           </div>
           <div className="splash-feature flex items-center gap-3 sm:gap-4 bg-navy-900/50 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-navy-800 backdrop-blur-sm">
             <div className="bg-green-500/20 p-2 sm:p-2.5 rounded-lg sm:rounded-xl"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-green-400" /></div>
-            <span className="font-bold text-gray-200 text-sm sm:text-lg">Premium Study Notes</span>
+            <span className="font-bold text-gray-200 text-sm sm:text-lg">Organized Study Notes</span>
           </div>
           <div className="splash-feature flex items-center gap-3 sm:gap-4 bg-navy-900/50 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-navy-800 backdrop-blur-sm">
             <div className="bg-purple-500/20 p-2 sm:p-2.5 rounded-lg sm:rounded-xl"><Users className="h-5 w-5 sm:h-6 sm:w-6 text-purple-400" /></div>

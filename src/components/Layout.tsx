@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Menu, X, Bot, User } from 'lucide-react';
+import { Menu, X, Bot, User } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
+import { getRouteMeta, usePageMeta } from '../utils/seo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  usePageMeta(getRouteMeta(location.pathname));
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -20,21 +22,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   const isActive = (path: string) =>
-    location.pathname === path
+    (path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(`${path}/`))
       ? 'text-brand-orange font-semibold bg-orange-50 dark:bg-navy-800/50'
       : 'text-gray-600 dark:text-gray-300 hover:text-navy-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-navy-800/50';
-
-  const isWelcomePage = location.pathname === '/';
-
-  if (isWelcomePage) {
-    return (
-      <div className="flex flex-col min-h-screen bg-navy-950 text-slate-900 dark:text-gray-100 transition-colors duration-300">
-        <main className="flex-grow">
-          {children}
-        </main>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-navy-950 text-slate-900 dark:text-gray-100 transition-colors duration-300">
@@ -48,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center justify-between">
 
             {/* Logo */}
-            <Link to="/home" className="flex items-center gap-2 group shrink-0">
+            <Link to="/" className="flex items-center gap-2 group shrink-0">
               <span className="text-lg sm:text-xl font-bold tracking-tight text-navy-900 dark:text-white font-display hidden lg:block whitespace-nowrap">
                 Padhaku<span className="text-brand-orange">Portal</span>
               </span>
@@ -56,9 +46,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-1">
-              <Link to="/home" className={`${isActive('/home')} transition-all px-4 py-2 rounded-full text-sm font-medium`}>Home</Link>
+              <Link to="/" className={`${isActive('/')} transition-all px-4 py-2 rounded-full text-sm font-medium`}>Home</Link>
               <Link to="/pyqs" className={`${isActive('/pyqs')} transition-all px-4 py-2 rounded-full text-sm font-medium`}>PYQs</Link>
               <Link to="/notes" className={`${isActive('/notes')} transition-all px-4 py-2 rounded-full text-sm font-medium`}>Notes</Link>
+              <Link to="/guides" className={`${isActive('/guides')} transition-all px-4 py-2 rounded-full text-sm font-medium`}>Guides</Link>
 
               <div className="w-px h-6 bg-gray-200 dark:bg-navy-700 mx-2"></div>
 
@@ -94,9 +85,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden pt-4 pb-2 space-y-1 border-t border-gray-100 dark:border-navy-700 mt-2">
-              <Link to="/home" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-navy-900 dark:text-white hover:bg-gray-50 dark:hover:bg-navy-800">Home</Link>
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-navy-900 dark:text-white hover:bg-gray-50 dark:hover:bg-navy-800">Home</Link>
               <Link to="/pyqs" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">PYQs</Link>
               <Link to="/notes" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">Notes</Link>
+              <Link to="/guides" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-navy-800">Guides</Link>
               <Link to="/ai-tutor" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2.5 rounded-xl text-base font-medium text-brand-orange bg-orange-50 dark:bg-navy-800/50 flex items-center gap-2">
                 <Bot className="h-4 w-4" /> AI Tutor
               </Link>
@@ -119,7 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-1">
-              <Link to="/home" className="flex items-center gap-2 group mb-4">
+              <Link to="/" className="flex items-center gap-2 group mb-4">
                 <div className="bg-navy-900 dark:bg-transparent p-1.5 rounded-lg">
                   <img src="/logo.png" alt="PadhakuPortal Logo" className="h-8 w-auto object-contain" />
                 </div>
@@ -137,8 +129,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                 <li><Link to="/pyqs" className="hover:text-brand-orange transition-colors">Previous Year Papers</Link></li>
                 <li><Link to="/notes" className="hover:text-brand-orange transition-colors">Lecture Notes</Link></li>
+                <li><Link to="/guides" className="hover:text-brand-orange transition-colors">Study Guides</Link></li>
                 <li><Link to="/exam-tips" className="hover:text-brand-orange transition-colors">Exam Tips</Link></li>
-                <li><Link to="/ai-tutor" className="hover:text-brand-orange transition-colors">AI Study Buddy</Link></li>
               </ul>
             </div>
 
@@ -148,6 +140,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/about" className="hover:text-brand-orange transition-colors">About Us</Link></li>
                 <li><Link to="/contact" className="hover:text-brand-orange transition-colors">Contact Us</Link></li>
                 <li><Link to="/contribute" className="hover:text-brand-orange transition-colors">Contribute Material</Link></li>
+                <li><Link to="/sitemap" className="hover:text-brand-orange transition-colors">Sitemap</Link></li>
                 <li><a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Join Community</a></li>
               </ul>
             </div>
@@ -158,6 +151,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/privacy-policy" className="hover:text-brand-orange transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service" className="hover:text-brand-orange transition-colors">Terms of Service</Link></li>
                 <li><Link to="/disclaimer" className="hover:text-brand-orange transition-colors">Disclaimer</Link></li>
+                <li><Link to="/sitemap" className="hover:text-brand-orange transition-colors">HTML Sitemap</Link></li>
                 <li><Link to="/admin" className="hover:text-brand-orange transition-colors mt-2 block opacity-50 hover:opacity-100">Admin Login</Link></li>
               </ul>
             </div>

@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2, ShoppingBag, Tag, Calculator, Cpu } from 'lucide-react';
+import { Search, ArrowRight, Clock, TrendingUp, Lightbulb, Folder, Megaphone, Calendar, BookOpen, Sparkles, Loader2, ShoppingBag, Tag, Calculator, Cpu, ShieldCheck, GraduationCap } from 'lucide-react';
 import { DEPARTMENTS } from '../constants';
+import { STUDY_GUIDES } from '../content/studyGuides';
 import * as Icons from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import anime from 'animejs';
@@ -121,7 +122,7 @@ const Home: React.FC = () => {
           </div>
 
           <h1 id="hero-title" className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-navy-900 dark:text-white mb-6 tracking-tight">
-            <Link to="/home" className="group inline-flex flex-col items-center">
+            <Link to="/" className="group inline-flex flex-col items-center">
               <span className="text-sm font-bold text-brand-orange mb-2 tracking-[0.3em] uppercase opacity-80 group-hover:opacity-100 transition-opacity">PadhakuPortal</span>
               <span>The Smarter Way</span>
             </Link>
@@ -195,7 +196,7 @@ const Home: React.FC = () => {
                 <BookOpen className="h-6 w-6" />
               </div>
               <h3 className="text-2xl font-bold text-navy-900 dark:text-white mb-2 group-hover:text-brand-orange transition-colors">Study Notes</h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">High-quality lecture notes and summaries curated by top students.</p>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Lecture notes and summaries organized for quick semester revision.</p>
               <div className="flex items-center text-sm font-bold text-brand-orange">
                 Read Notes <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -212,7 +213,7 @@ const Home: React.FC = () => {
                 <Sparkles className="h-6 w-6" />
               </div>
               <h3 className="text-2xl font-bold text-navy-900 dark:text-white mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">Exam Tips</h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Strategies and shortcuts from toppers to maximize your score.</p>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Practical revision methods, answer-writing habits, and exam-week checklists.</p>
               <div className="flex items-center text-sm font-bold text-yellow-600 dark:text-yellow-400">
                 Learn More <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -220,6 +221,50 @@ const Home: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Study Guide Library */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-brand-orange mb-2">Original study guides</p>
+            <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-3">Prepare with focused, readable exam guidance</h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+              The guide library turns common student problems into practical revision plans:
+              what to study, how to practice, which mistakes to avoid, and how to present answers in semester exams.
+            </p>
+          </div>
+          <Link to="/guides" className="inline-flex items-center justify-center gap-2 bg-navy-900 dark:bg-brand-orange text-white px-5 py-3 rounded-xl font-bold hover:bg-navy-800 dark:hover:bg-brand-hover transition-colors">
+            Browse all guides <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {STUDY_GUIDES.slice(0, 6).map((guide) => (
+            <Link
+              key={guide.slug}
+              to={`/guides/${guide.slug}`}
+              className="group bg-white dark:bg-navy-900 border border-gray-100 dark:border-navy-800 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-brand-orange/40 transition-all"
+            >
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <span className="inline-flex items-center gap-2 rounded-full bg-orange-50 dark:bg-brand-orange/10 px-3 py-1 text-xs font-bold text-brand-orange">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  {guide.category}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{guide.readingMinutes} min</span>
+              </div>
+              <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-3 group-hover:text-brand-orange transition-colors">
+                {guide.title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                {guide.description}
+              </p>
+              <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-orange">
+                Read guide <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* Notice Board */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
@@ -285,6 +330,40 @@ const Home: React.FC = () => {
       </div>
 
 
+      {/* Trust Section */}
+      <section className="bg-white dark:bg-navy-900 py-16 border-y border-gray-100 dark:border-navy-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-brand-orange mb-2">How the portal works</p>
+              <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-4">Built for useful study material, not clutter</h2>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                PadhakuPortal focuses on engineering students who need quick access to previous year papers,
+                notes, revision guides, and practical study support. Student submissions are reviewed before publishing,
+                and important pages such as privacy, terms, contact, disclaimer, and sitemap are available site-wide.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="rounded-2xl bg-gray-50 dark:bg-navy-950 border border-gray-100 dark:border-navy-800 p-5">
+                <ShieldCheck className="h-7 w-7 text-brand-orange mb-4" />
+                <h3 className="font-bold text-navy-900 dark:text-white mb-2">Reviewed resources</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Uploads go through admin review before appearing in the public library.</p>
+              </div>
+              <div className="rounded-2xl bg-gray-50 dark:bg-navy-950 border border-gray-100 dark:border-navy-800 p-5">
+                <BookOpen className="h-7 w-7 text-brand-orange mb-4" />
+                <h3 className="font-bold text-navy-900 dark:text-white mb-2">Original guides</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Subject and study-skill pages explain preparation steps in student-friendly language.</p>
+              </div>
+              <div className="rounded-2xl bg-gray-50 dark:bg-navy-950 border border-gray-100 dark:border-navy-800 p-5">
+                <Search className="h-7 w-7 text-brand-orange mb-4" />
+                <h3 className="font-bold text-navy-900 dark:text-white mb-2">Easy navigation</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Branch filters, guide categories, and sitemap links help students find material quickly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Departments */}
       <div className="bg-white dark:bg-navy-900 py-16 border-t border-gray-100 dark:border-navy-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -321,13 +400,13 @@ const Home: React.FC = () => {
           <div className="relative z-10 max-w-xl">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-display">Share your Knowledge</h2>
             <p className="text-blue-100 text-lg leading-relaxed mb-8 md:mb-0">
-              Join thousands of students contributing to the largest open-source study material repository. Help your juniors ace their exams.
+              Help grow a reviewed study material repository for students who need clear notes, PYQs, and practical exam preparation.
             </p>
           </div>
           <div className="relative z-10 flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <Link to="/contribute" className="relative overflow-hidden bg-brand-orange text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-hover transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-1 text-center group">
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:animate-shimmer" />
-              <span className="relative">Contribute ✨</span>
+              <span className="relative">Contribute material</span>
             </Link>
             <a href="https://chat.whatsapp.com/JKjcvjun6roIkbat7O59uJ" target="_blank" rel="noopener noreferrer" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-center flex items-center justify-center">
               Join Community

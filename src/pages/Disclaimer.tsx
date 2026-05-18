@@ -3,39 +3,56 @@ import React from 'react';
 const Disclaimer: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
-      <div className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
-        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-6">Disclaimer</h1>
-        <p className="text-sm text-gray-500 mb-8">Last updated: {new Date().toLocaleDateString()}</p>
-        
+      <article className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
+        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-4">Disclaimer</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: May 18, 2026</p>
+
         <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
           <p>
-            If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at padhakuportal@gmail.com.
+            PadhakuPortal publishes educational resources for general academic support. The website is not an official
+            college, university, government, exam-board, or certification authority unless a page explicitly says so.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Disclaimers for PadhakuPortal</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Educational Information Only</h2>
           <p>
-            All the information on this website - padhakuportal.com - is published in good faith and for general information and educational purposes only. PadhakuPortal does not make any warranties about the completeness, reliability, and accuracy of this information. Any action you take upon the information you find on this website (PadhakuPortal), is strictly at your own risk. PadhakuPortal will not be liable for any losses and/or damages in connection with the use of our website.
+            Study guides, notes, previous year papers, AI responses, and community submissions are intended to support
+            learning and revision. They should not be treated as guaranteed exam predictions, official solutions, legal
+            advice, financial advice, career guarantees, or professional counseling.
           </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Accuracy and Verification</h2>
           <p>
-            The study materials, notes, and previous year question papers (PYQs) provided on this platform are uploaded by students and contributors. While we strive to ensure quality, we do not guarantee the absolute accuracy of the academic content. Students are advised to cross-verify the material with their official university syllabus and professors.
+            We try to keep resources useful and clear, but academic information can contain mistakes, become outdated,
+            or vary by syllabus and institution. Students should verify important details with official notices,
+            faculty guidance, textbooks, and current university syllabi before relying on them.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Contributor Content</h2>
+          <p>
+            Some resources may be submitted by students or contributors. Admin review is intended to improve quality and
+            safety, but it does not guarantee that every file is complete, current, or error-free. If you believe content
+            violates rights, includes private information, or should not be public, contact us for review.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">AI Tutor Disclaimer</h2>
+          <p>
+            AI-generated explanations can be inaccurate, incomplete, or unsuitable for a specific syllabus. Always check
+            formulas, code, derivations, and factual claims before using them in assignments, exams, or practical work.
           </p>
 
           <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">External Links</h2>
           <p>
-            From our website, you can visit other websites by following hyperlinks to such external sites. While we strive to provide only quality links to useful and ethical websites, we have no control over the content and nature of these sites. These links to other websites do not imply a recommendation for all the content found on these sites. Site owners and content may change without notice and may occur before we have the opportunity to remove a link which may have gone 'bad'.
+            PadhakuPortal may link to external websites, communities, tools, or files. External links are provided for
+            convenience and do not imply endorsement of every statement, service, or practice on those websites.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Consent</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Contact</h2>
           <p>
-            By using our website, you hereby consent to our disclaimer and agree to its terms.
-          </p>
-
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Update</h2>
-          <p>
-            Should we update, amend or make any changes to this document, those changes will be prominently posted here.
+            For corrections, removal requests, or questions about this disclaimer, email{' '}
+            <a href="mailto:padhakuportal@gmail.com" className="text-brand-orange hover:underline">padhakuportal@gmail.com</a>.
           </p>
         </div>
-      </div>
+      </article>
     </div>
   );
 };

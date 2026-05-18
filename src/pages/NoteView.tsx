@@ -138,14 +138,13 @@ const NoteView: React.FC = () => {
 
         // Fallback to Gemini if NVIDIA fails or is missing
         if (!jsonText && geminiKey) {
-            const genAI = new GoogleGenAI(geminiKey);
-            const model = genAI.getGenerativeModel({
+            const genAI = new GoogleGenAI({ apiKey: geminiKey });
+            const result = await genAI.models.generateContent({
                 model: 'gemini-1.5-flash',
-                generationConfig: { responseMimeType: "application/json" }
+                contents: prompt,
+                config: { responseMimeType: "application/json" }
             });
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            jsonText = response.text();
+            jsonText = result.text ?? "";
         }
         
         if (jsonText) {

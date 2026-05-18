@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Sparkles, Loader2, AlertTriangle, Paperclip, X, FileText, Zap, MessageSquare, Book, Brain, GraduationCap } from 'lucide-react';
-import { GoogleGenAI, ChatSession } from "@google/genai";
+import { GoogleGenAI, type Chat } from "@google/genai";
 import { useSearchParams } from 'react-router-dom';
 import { NOTES, PYQS, DEPARTMENTS } from '../constants';
 
@@ -65,12 +65,12 @@ const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'model',
-      text: "Welcome to your **Premium AI Tutor**! 🎓\n\nI'm powered by advanced models (Llama 3.1 & Gemini) to give you the most accurate academic help.\n\nTry asking me about:\n- **Numerical Problems**: Upload a photo for a step-by-step solution.\n- **Concept Summaries**: Get simple explanations for tough topics.\n- **Exam Resources**: I can find relevant notes and PYQs for you."
+      text: "Welcome to **Padhaku AI Tutor**.\n\nUse me for study support, concept revision, and practice prompts. AI answers can make mistakes, so verify important formulas, facts, and exam instructions.\n\nTry asking me about:\n- **Numerical Problems**: Upload a photo for a step-by-step explanation.\n- **Concept Summaries**: Get simpler explanations for tough topics.\n- **Exam Resources**: Ask for relevant notes, PYQs, or guide topics."
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chatSession, setChatSession] = useState<ChatSession | null>(null);
+  const [chatSession, setChatSession] = useState<Chat | null>(null);
   const [attachments, setAttachments] = useState<AttachmentData[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -86,12 +86,13 @@ const AIChat: React.FC = () => {
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
       if (!apiKey) return;
-      const genAI = new GoogleGenAI(apiKey);
-      const model = genAI.getGenerativeModel({ 
-        model: 'gemini-1.5-flash',
-        systemInstruction: "You are an expert academic tutor. Help students learn with clear, accurate explanations using Markdown formatting."
+      const genAI = new GoogleGenAI({ apiKey });
+      const chat = genAI.chats.create({
+        model: 'gemini-2.5-flash',
+        config: {
+          systemInstruction: "You are an academic tutor for engineering students. Help students learn with clear, accurate explanations using Markdown formatting. Remind users to verify important academic facts when appropriate."
+        }
       });
-      const chat = model.startChat({ history: [] });
       setChatSession(chat);
     } catch (error) {
       console.error("Failed to initialize AI chat:", error);
@@ -219,9 +220,8 @@ const AIChat: React.FC = () => {
           parts.push({ inlineData: { mimeType: att.mimeType, data: att.base64 } });
         });
 
-        const result = await chatSession.sendMessage(parts);
-        const response = await result.response;
-        const responseText = response.text();
+        const result = await chatSession.sendMessage({ message: parts });
+        const responseText = result.text;
         
         if (responseText) {
           setMessages(prev => [...prev, { role: 'model', text: responseText }]);
@@ -275,7 +275,7 @@ const AIChat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] bg-[#fcfcfd] dark:bg-navy-950 overflow-hidden">
-      {/* Premium Header */}
+      {/* Header */}
       <div className="bg-white/80 dark:bg-navy-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-navy-800 px-6 py-4 flex justify-between items-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] z-20">
         <div className="flex items-center gap-4">
           <div className="relative">
@@ -289,7 +289,7 @@ const AIChat: React.FC = () => {
               Padhaku AI <Sparkles className="h-4 w-4 text-yellow-500" />
             </h1>
             <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1 h-1 bg-brand-orange rounded-full"></span> Llama 3.1 & Gemini 1.5
+              <span className="w-1 h-1 bg-brand-orange rounded-full"></span> Study help with verification
             </p>
           </div>
         </div>
@@ -316,7 +316,7 @@ const AIChat: React.FC = () => {
             <div className="max-w-2xl mx-auto mt-12 animate-fade-in">
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 dark:bg-brand-orange/10 text-brand-orange text-xs font-bold mb-4 border border-brand-orange/20 animate-bounce">
-                        <Zap className="h-3.5 w-3.5" /> High Performance AI Active
+                        <Zap className="h-3.5 w-3.5" /> AI study support active
                     </div>
                     <h2 className="text-3xl font-display font-bold text-navy-900 dark:text-white mb-4">How can I help your studies?</h2>
                     <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">Ask me anything from your syllabus, or upload a photo of a problem you're stuck on.</p>

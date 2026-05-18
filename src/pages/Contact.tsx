@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,22 +38,31 @@ const Contact: React.FC = () => {
       <div className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
         <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-6">Contact Us</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-10 text-lg">
-          Have a question, suggestion, or experiencing an issue? We'd love to hear from you. Please reach out to us using the information below.
+          Contact PadhakuPortal for corrections, content removal requests, privacy questions, contribution issues, or general feedback about study resources.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-navy-900 dark:text-white">Get in Touch</h3>
+            <h2 className="text-2xl font-bold text-navy-900 dark:text-white">Get in Touch</h2>
             
             <div className="flex items-start gap-4">
               <div className="bg-brand-orange/10 p-3 rounded-xl text-brand-orange">
                 <Mail className="h-6 w-6" />
               </div>
               <div>
-                <h4 className="font-bold text-navy-900 dark:text-white">Email</h4>
+                <h3 className="font-bold text-navy-900 dark:text-white">Email</h3>
                 <p className="text-gray-500 dark:text-gray-400 mt-1">padhakuportal@gmail.com</p>
                 <p className="text-xs text-gray-400 mt-1">We aim to reply within 24 hours.</p>
               </div>
+            </div>
+
+            <div className="rounded-2xl bg-gray-50 dark:bg-navy-950 border border-gray-100 dark:border-navy-800 p-5">
+              <h2 className="text-lg font-bold text-navy-900 dark:text-white mb-3">Before you send</h2>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li>For corrections, include the page URL and the exact issue.</li>
+                <li>For content removal, explain your relationship to the material and why it should be removed.</li>
+                <li>For privacy requests, do not include sensitive IDs or passwords in the message.</li>
+              </ul>
             </div>
 
           </div>

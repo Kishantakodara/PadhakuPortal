@@ -186,7 +186,7 @@ const NotesList: React.FC = () => {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-navy-900 dark:text-white mb-2">Study Notes</h1>
-          <p className="text-gray-500 dark:text-gray-400">High-quality lecture notes and summaries curated by top students.</p>
+          <p className="text-gray-500 dark:text-gray-400">Lecture notes and summaries organized for branch-wise semester revision.</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">

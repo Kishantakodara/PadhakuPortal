@@ -251,7 +251,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate('/home');
+    navigate('/');
   };
 
   return (

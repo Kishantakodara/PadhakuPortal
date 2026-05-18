@@ -3,57 +3,118 @@ import React from 'react';
 const PrivacyPolicy: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
-      <div className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
-        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-6">Privacy Policy</h1>
-        <p className="text-sm text-gray-500 mb-8">Last updated: {new Date().toLocaleDateString()}</p>
-        
+      <article className="bg-white dark:bg-navy-900 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-navy-800">
+        <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-white mb-4">Privacy Policy</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: May 18, 2026</p>
+
         <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
           <p>
-            At PadhakuPortal, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by PadhakuPortal and how we use it.
+            PadhakuPortal is an educational website for engineering students. This Privacy Policy explains what
+            information may be collected when you use the website, submit a contact form, contribute study material,
+            use the AI Tutor, or interact with analytics and advertising technologies.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">1. Information We Collect</h2>
-          <p>
-            The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
-          </p>
-          <p>
-            If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.
-          </p>
-
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">2. How We Use Your Information</h2>
-          <p>We use the information we collect in various ways, including to:</p>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Information We Collect</h2>
+          <p>We may collect the following information depending on how you use the site:</p>
           <ul>
-            <li>Provide, operate, and maintain our website</li>
-            <li>Improve, personalize, and expand our website</li>
-            <li>Understand and analyze how you use our website</li>
-            <li>Develop new products, services, features, and functionality</li>
-            <li>Communicate with you for customer service or updates</li>
-            <li>Send you emails</li>
-            <li>Find and prevent fraud</li>
+            <li>Contact details you submit, such as name, email address, and message content.</li>
+            <li>Contribution details, such as uploaded PDF files, note titles, author names, branch, semester, and related metadata.</li>
+            <li>AI Tutor inputs, including typed questions and files or images you choose to upload for academic help.</li>
+            <li>Technical data such as browser type, device type, referring pages, approximate region, pages visited, and performance events.</li>
+            <li>Cookies or similar identifiers used for preferences, analytics, site security, and advertising where applicable.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">3. Log Files</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">How We Use Information</h2>
+          <p>We use information to operate the site, respond to messages, review contributed resources, improve navigation, prevent abuse, maintain security, and understand which educational resources are useful to students.</p>
           <p>
-            PadhakuPortal follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable.
+            We do not ask users to provide sensitive personal information for normal browsing. Please do not upload
+            private documents, IDs, passwords, confidential college records, or personal information that is not needed
+            for an educational resource.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">4. Cookies and Web Beacons</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Cookies, Analytics, and Measurement</h2>
           <p>
-            Like any other website, PadhakuPortal uses "cookies". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+            PadhakuPortal may use cookies, local storage, and similar technologies to remember preferences, measure site
+            performance, and understand aggregate usage. The site uses Vercel Analytics and Vercel Speed Insights to
+            measure traffic and performance. These tools may process technical information such as page URL, device,
+            browser, region, and timing data.
+          </p>
+          <p>
+            The site also loads Google Fonts from Google-hosted domains. Your browser may contact Google servers to
+            retrieve those font files, which can include technical request data such as IP address and user agent.
           </p>
 
-          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">5. Advertising Partners Privacy Policies</h2>
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Google Advertising and Third-Party Vendors</h2>
           <p>
-            Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to PadhakuPortal or other websites.
+            If Google AdSense or other Google advertising products are enabled, third-party vendors, including Google,
+            may use cookies to serve ads based on a user's prior visits to PadhakuPortal or other websites. Google's use
+            of advertising cookies enables Google and its partners to serve ads based on visits to this site and other
+            sites on the internet.
           </p>
-          <p className="mt-4">
-            Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our site and/or other sites on the Internet.
+          <p>
+            Users may opt out of personalized advertising by visiting{' '}
+            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">
+              Google Ads Settings
+            </a>
+            . Users may also learn more about how Google uses data on partner sites at{' '}
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">
+              How Google uses information from sites or apps that use our services
+            </a>
+            , or opt out of some third-party personalized advertising cookies through{' '}
+            <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">
+              aboutads.info
+            </a>
+            .
           </p>
-          <p className="mt-4">
-            Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="http://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">www.aboutads.info</a>.
+          <p>
+            If additional ad vendors or ad networks are used in the future, their privacy practices and opt-out options
+            should be reviewed and disclosed here before those services are enabled.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Service Providers</h2>
+          <p>PadhakuPortal may use service providers to run important site features:</p>
+          <ul>
+            <li>Supabase for database and file storage features used by notes, PYQs, and submissions.</li>
+            <li>Web3Forms for processing contact form messages.</li>
+            <li>Google Gemini and NVIDIA-hosted AI APIs where configured for AI Tutor responses.</li>
+            <li>Vercel for hosting, analytics, performance insights, and deployment infrastructure.</li>
+          </ul>
+          <p>These providers process information only as needed for the features they support and according to their own policies.</p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">User Contributions and Public Content</h2>
+          <p>
+            Materials submitted for publication may become visible to other users after admin review. Public resource
+            pages may display information such as title, branch, semester, author name, upload metadata, and the study
+            material itself. Contributors should only submit content they have the right to share.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Data Retention and Removal Requests</h2>
+          <p>
+            We keep contact messages, submissions, and technical records only as long as reasonably needed for site
+            operation, security, review, and support. To request correction or removal of content you submitted, contact
+            us at <a href="mailto:padhakuportal@gmail.com" className="text-brand-orange hover:underline">padhakuportal@gmail.com</a>.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Children's Privacy</h2>
+          <p>
+            PadhakuPortal is intended for college and engineering students. We do not knowingly collect personal
+            information from children under 13. If you believe a child has provided personal information, contact us so
+            we can review and remove it where appropriate.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Security</h2>
+          <p>
+            We use reasonable technical and organizational measures to protect information. No website or internet
+            transmission is completely secure, so users should avoid submitting sensitive or unnecessary personal data.
+          </p>
+
+          <h2 className="text-2xl font-bold text-navy-900 dark:text-white mt-8 mb-4">Contact</h2>
+          <p>
+            For privacy questions, content removal requests, or data-related concerns, contact the PadhakuPortal team at{' '}
+            <a href="mailto:padhakuportal@gmail.com" className="text-brand-orange hover:underline">padhakuportal@gmail.com</a>.
           </p>
         </div>
-      </div>
+      </article>
     </div>
   );
 };
